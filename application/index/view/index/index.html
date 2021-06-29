@@ -1,0 +1,73 @@
+{extend name="public/default" /}
+
+{block name="title"}
+<title>选课系统-管理员</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .title{
+        text-align: center;
+        color: {$config_color}; 
+        font-size: 25px;
+        font-weight: 600;
+    }
+    .dowebok{
+        text-align: center;
+        margin: 120px auto;
+    }
+    .flipTimer .digit > div.digit-top, .flipTimer .digit > div.shadow-top {
+        background-color: {$config_color};
+        border-bottom: 1px solid {$config_color};
+    }
+    .flipTimer .digit > div.digit-bottom, .flipTimer .digit > div.shadow-bottom {
+          background-color: {$config_color};
+    }
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">我的桌面</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+	<article class="cl pd-20">
+		<h3 class="f-20 text-success title">欢迎使用校园选课系统</h3>
+		
+		    <!--pc时钟-->
+			<div class="dowebok animate__animated animate__bounce">
+            	<div class="hours"></div>
+            	<div class="minutes"></div>
+            	<div class="seconds  hidden-xs"></div>
+            </div>
+            <!--移动时钟-->
+            
+    </article>
+    <footer class="footer mt-20">
+    	<div class="container-fluid">
+    		<!--<nav> <a href="javascript:;" >关于我们</a> <span class="pipe">|</span> <a href="javascript:;">联系我们</a> <span class="pipe">|</span> <a href="javascript:;" >法律声明</a> </nav>-->
+    		<p>Copyright &copy;2021 www.yangsong.cool All Rights Reserved. <br>
+    			<a href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow">渝ICP备2020013404号-1</a><br>
+    		</p>
+    	</div>
+    </footer>
+</div>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+$(function(){
+	$('.dowebok').flipTimer({
+		seconds: true
+	});
+});
+		
+</script>
+{/block}

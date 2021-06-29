@@ -1,0 +1,104 @@
+<!--_menu 作为公共模版分离出去-->
+<aside class="Hui-aside">
+	
+	<div class="menu_dropdown bk_2">
+	    <dl id="menu-article" class="visible-xs">
+			<dt class="config_hover" style="color: #fff;"><i class="Hui-iconfont">&#xe705;</i> 个人中心<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					<li><a href="{:url('Index/getPersonalInformation')}" >个人信息</a></li>
+					<li><a href="{:url('Index/modifyPassword')}" >修改密码</a></li>
+					<li class="logout"><a href="javascript:;" >安全退出</a></li>
+        		</ul>
+        	</dd>
+        </dl>
+        
+		<dl id="menu-article">
+			<dt class="config_hover {in name='$selected_id' value='0,1,2,3' }selected{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe62d;</i> 用户管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd style="display:{in name='$selected_id' value='0,1,2,3' }block{/in}" >
+				<ul>
+				    <li><a class="{if condition='$selected_id eq 0'}selected_menu{/if}" href="{:url('Index/accountManage')}" title="">账号管理</a></li>
+					<li><a class="{if condition='$selected_id eq 1'}selected_menu{/if}" href="{:url('Index/superUserManage')}" title="">超级用户管理</a></li>
+					<li><a class="{if condition='$selected_id eq 2'}selected_menu{/if}" href="{:url('Index/studentManage')}" title="">学生管理</a></li>
+					<li><a class="{if condition='$selected_id eq 3'}selected_menu{/if}" href="{:url('Index/teacherManage')}" title="">教师管理</a></li>
+        		</ul>
+        	</dd>
+        </dl>
+        
+        <dl id="menu-article"> 
+			<dt class="config_hover {in name='$selected_id' value='12,4,5,6,7' }selected{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe72d;</i> 课程管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd style="display:{in name='$selected_id' value='12,4,5,6,7' }block{/in}" >
+				<ul>
+				    <li><a class="{if condition='$selected_id eq 12'}selected_menu{/if}" href="{:url('Index/systemNotice')}" title="">课程公告</a></li>
+				    <li><a class="{if condition='$selected_id eq 4'}selected_menu{/if}" href="{:url('Index/courseManage')}" title="">课程管理</a></li>
+				    <li><a class="{if condition='$selected_id eq 5'}selected_menu{/if}" href="{:url('Index/issueManage')}" title="">发布管理</a></li>
+					<li><a class="{if condition='$selected_id eq 6'}selected_menu{/if}" href="{:url('Index/majorManage')}" title="">专业管理</a></li>
+					<li><a class="{if condition='$selected_id eq 7'}selected_menu{/if}" href="{:url('Index/collegeManage')}" title="">院系管理</a></li>
+        		</ul>
+        	</dd>
+        </dl>
+        
+        <dl id="menu-system">
+			<dt class="config_hover {in name='$selected_id' value='8,9' }selected{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe63c;</i> 权限管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd style="display:{in name='$selected_id' value='8,9' }block{/in}" >
+				<ul>
+					<li><a class="{if condition='$selected_id eq 8'}selected_menu{/if}" href="{:url('Index/powerManage')}" title="">权限管理</a></li>
+					<li><a class="{if condition='$selected_id eq 9'}selected_menu{/if}" href="{:url('Index/roleManage')}" title="">角色管理</a></li>
+        		</ul>
+        	</dd>
+        </dl>
+        
+        <dl id="menu-system">
+			<dt class="config_hover {in name='$selected_id' value='15,16' }selected{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe702;</i> 评价管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd style="display:{in name='$selected_id' value='15,16' }block{/in}" >
+				<ul>
+					<li><a class="{if condition='$selected_id eq 15'}selected_menu{/if}" href="{:url('Index/coursepj')}" title="">课程评价</a></li>
+					<li><a class="{if condition='$selected_id eq 16'}selected_menu{/if}" href="{:url('Index/teacherpj')}" title="">教师评价</a></li>
+        		</ul>
+        	</dd>
+        </dl>
+        
+        <dl id="menu-system">
+			<dt class="config_hover {in name='$selected_id' value='18' }selected{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe68a;</i> 邮件管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd style="display:{in name='$selected_id' value='18' }block{/in}" >
+				<ul>
+					<li><a class="{if condition='$selected_id eq 18'}selected_menu{/if}" href="{:url('Index/mailManage')}" title="">发送邮件</a></li>
+        		</ul>
+        	</dd>
+        </dl>
+        
+        <dl id="menu-system">
+			<dt class="config_hover {in name='$selected_id' value='10' }selected{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe61c;</i> 数据统计<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd style="display:{in name='$selected_id' value='10' }block{/in}" >
+				<ul>
+					<li><a class="{if condition='$selected_id eq 10'}selected_menu{/if}" href="{:url('Index/dataManage')}" title="">数据统计</a></li>
+        		</ul>
+        	</dd>
+        </dl>
+        
+        
+       <dl id="menu-system">
+			<dt class="config_hover {in name='$selected_id' value='11,13,14' }selected{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe62e;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd style="display:{in name='$selected_id' value='11,13,14' }block{/in}" >
+				<ul>
+					<li><a class="{if condition='$selected_id eq 11'}selected_menu{/if}" href="{:url('Index/systemConfig')}" title="">系统设置</a></li>
+					<li><a class="{if condition='$selected_id eq 13'}selected_menu{/if}" href="{:url('Index/systemIntroduction')}" title="">系统概述</a></li>
+					<li><a class="{if condition='$selected_id eq 14'}selected_menu{/if}" href="{:url('Index/systemLog')}" title="">系统日志</a></li>
+        		</ul>
+        	</dd>
+        </dl>
+        
+        <dl id="menu-system">
+			<dt class="config_hover {in name='$selected_id' value='17' }selected{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe609;</i> 回收站<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd style="display:{in name='$selected_id' value='17' }block{/in}" >
+				<ul>
+					<li><a class="{if condition='$selected_id eq 17'}selected_menu{/if}" href="{:url('Index/recovery')}" title="">回收站</a></li>
+        		</ul>
+        	</dd>
+        </dl>
+        
+		
+</div>
+</aside>
+<!--<div class="dislpayArrow hidden-xs config_color"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>-->
+<!--<div class="dislpayArrow hidden-xs config_color"><a id="switch"  href="javascript:void(0);" onClick="displaynavbars(this)"><i class="Hui-iconfont switch">&#xe678;</i></a></div>-->

@@ -1,0 +1,627 @@
+{extend name="public/default" /}
+
+{block name="title"}
+<title>选课系统-管理员</title>
+</head>
+<body>
+    
+    <style type="text/css" media="all">
+    
+        .Hui-article{
+            background: #F2F2F2;
+        }
+        .manage{
+            background: #fff;
+            box-shadow:0 0 10px rgba(0,0,0,0.16);
+        }
+        .search{
+            width: 250px;
+            /*min-width: 100px;*/
+        }
+        .dataTables_wrapper .dataTables_filter {
+            display: none;    
+        }
+        
+        .check-box, .radio-box {
+             padding-left: 0 ;
+        }
+        .enableEdit{
+            cursor: pointer;
+        }
+        
+        /*号码验证*/
+        .phone_check{
+            margin: 0 5px;
+            color: blue;
+            cursor: pointer;
+        }
+        .not{
+            cursor: not-allowed;
+        }
+        .modal{
+            top:20%;
+        }
+        .modal-dialog {
+            width: 550px !important;
+        }
+        .checked{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            margin: 5px auto;
+            /*background: red;*/
+            display: flex;
+        }
+        .checked .checked_label{
+            flex: 1;
+            color: rgba(0,0,0,.4);
+        }
+        .checked .checked_value{
+            flex: 5;
+        }
+        /*.input-text, .textarea{*/
+        /*    width: auto;*/
+        /*}*/
+        .input-text[type="number"] {
+            width: 150px;
+        }
+        
+        /*去除input[number] 默认样式*/
+        ::-webkit-inner-spin-button {
+           -webkit-appearance: none;
+        }
+        .input-text[type="number"] {
+            width: 100%;
+        }
+        
+        .select-box, .select-box.size-M {
+            padding: 4px 5px;
+            margin: 0 5px;
+            width: 100px;
+            width: auto;
+        }
+        .l input{
+            width: 200px;
+        }
+        
+    </style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">课程管理</span>  
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">发布管理</span> 
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a>
+	</nav>
+	
+	<div class="Hui-article" style="display:{$isPower?'':'none'}">
+	     
+		<article class="cl pd-20 manage hui-bounceinB" id="showCourse">
+			<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+			    <span class="l">
+			        <span class="select-box">
+                      <select class="select" size="1" id="cyear" name="cyear" >
+                           <option value="0" selected>全部年级</option>
+                            {volist name="years" id="vo"}
+                                <option value="{$vo.id}" id="edit_cyear_{$vo.id}">{$vo.name}</option>
+                            {/volist}
+                      </select>
+                    </span>
+                    <span class="select-box">
+                      <select class="select" size="1" id="college" name="college">
+                          <option value="0" selected>全部学院</option>
+                         {volist name="colleges" id="vo"}
+                                <option value="{$vo.id}" id="edit_college_{$vo.id}">{$vo.name}</option>
+                          {/volist}
+                      </select>
+                    </span>
+                    <span class="select-box">
+                      <select class="select" size="1" id="major" name="major">
+                          <option value="0" selected>全部专业</option>
+                        {volist name="majors" id="vo"}
+                                <option value="{$vo.id}" id="edit_major_{$vo.id}" >{$vo.name}</option>
+                        {/volist}
+                      </select>
+                    </span>
+			        <a href="javascript:;" class="btn btn-primary radius" id="select_condition"><i class="Hui-iconfont">&#xe600;</i> 筛选</a>
+			    </span> 
+			    <span class="r hidden-xs">
+                    <input type="text" class="input-text search" placeholder="课程名称"  name="">
+				    <button type="submit" class="btn btn-success radius searchCourse" ><i class="Hui-iconfont">&#xe665;</i> 搜课程</button>			        
+			    </span>
+			</div>
+			
+			<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+			    <span class="l">
+			        <input type="text" placeholder="选课起始时间" class="input-text" id="class_start"> -
+			        <input type="text" placeholder="选课截止时间" class="input-text" id="class_end">
+			        <a href="javascript:;" class="btn btn-primary radius" id="setClassTime"><i class="Hui-iconfont"></i> 开放选课时间段</a>
+			    </span> 
+			</div>
+			
+			<div class="cl pd-5 bg-1 bk-gray mt-20 visible-xs"> 
+			    <span class="l">
+                    <input type="text" class="input-text search" style="width:200px" placeholder="课程名称"  name="">
+				    <button type="submit" class="btn btn-success radius searchCourse"  name=""><i class="Hui-iconfont">&#xe665;</i> 搜课程</button>			        
+			    </span>
+			</div>
+			
+			<!--课程信息表格-->
+			<div class="mt-20">
+				<table class="table table-border table-bordered table-hover table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="25"><input type="checkbox" disabled name="" value=""></th>
+							<th width="">ID</th>
+							<th width="">课程名称</th>
+							<th width="">授课教师</th>
+							<!--<th width="">状态</th>-->
+							
+							<th width="">已选</th>
+							<th width="">未选</th>
+							<th width="">总数</th>
+							
+							<!--<th width="">操作</th>-->
+						</tr>
+					</thead>
+					<tbody>
+					    
+					    {volist name="courses" id="vo"}
+    						<tr class="text-c">
+    							<td><input type="checkbox" class="checked_delete" uniqueId="{$vo.cid}" name=""></td>
+    							<td>{$vo.cid}</td>
+    							<td>{$vo.cname}</td>
+    							<td>{$vo.teacher}</td>
+    							
+    							<!--<td>{if condition="$vo.type eq 0"}<span class="label label-danger radius">线下</span>{else/}<span class="label label-success radius">线上</span>{/if}</td>-->
+    							<!--<td class="enableEdit editCourseStatus" uniqueId="{$vo.cid}" status="{$vo.status}">{if condition="$vo.status eq 0"}<span class="label label-danger radius">禁用</span>{else/}<span class="label label-success radius">启用</span>{/if}</td>-->
+    							
+    							<td>{$vo.selected}</td>
+    							<td>{$vo.notselected}</td>
+    							<td>{$vo.number}</td>
+    							
+    							<!--<td class="td-manage"> -->
+        			<!--				<a title="编辑" href="javascript:;" id="editCourse" uniqueId="{$vo.cid}" class="ml-5" style="text-decoration:none;font-size:20px;"><i class="Hui-iconfont">&#xe6df;</i></a>-->
+        			<!--				<a title="删除" href="javascript:;" id="deleteCourse" uniqueId="{$vo.cid}" class="ml-5" style="text-decoration:none;font-size:20px;"><i class="Hui-iconfont">&#xe6e2;</i></a>-->
+        			<!--			</td>-->
+    						</tr>
+						{/volist}
+						
+					</tbody>
+				</table>
+			</div>
+			
+		</article>
+		
+		<!--添加课程信息表单-->
+		
+		
+		<!--编辑课程信息表单-->
+		
+        
+	</div>
+	
+	<!--无权查看显示-->
+	<div class="nopower" style="display:{$isPower?'none':''}">
+	    <img  src="__PUBLIC__/img/noPower.jpg" alt="" />
+	</div>
+</section>
+
+{load href="__PUBLIC__/plugins/layDate-v5.2.0/laydate/laydate.js" /}
+{/block}
+
+{block name="script"}
+
+
+<script type="text/javascript">
+
+$(function(){
+	$('.table-sort').dataTable({
+		"aaSorting": [[ 1, "asc" ]],//默认第几个排序
+		"bStateSave": true,//状态保存
+		"aoColumnDefs": [
+		  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+		  {"orderable":false,"aTargets":[0,2,3,4,5,6]}// 制定列不参与排序
+		]
+	});
+	$('.table-sort tbody').on( 'click', 'tr', function () {
+		if ( $(this).hasClass('selected') ) {
+			$(this).removeClass('selected');
+		}
+		else {
+			$('tr.selected').removeClass('selected');
+			$(this).addClass('selected');
+		}
+	});
+	
+    // 日期选择
+    var startTime,endTime,start_time,end_time;
+    laydate.render({
+      elem: '#class_start',
+      type: 'datetime',
+    //   range: true,
+      value:'',
+      value:'{$start_time}',
+      format: 'yyyy年MM月dd日 HH:mm',
+      done: function(value, date){
+        startTime = JSON.stringify(date)
+        startTime = JSON.parse(startTime)
+        start_time = value
+      }
+    }); 
+    
+    laydate.render({
+      elem: '#class_end',
+      type: 'datetime',
+      value:'{$end_time}',
+      format: 'yyyy年MM月dd日 HH:mm',
+      done: function(value, date){
+        
+        endTime = JSON.stringify(date)
+        endTime = JSON.parse(endTime)
+        end_time =value
+        
+        if(!startTime){
+            layer_shake('请先重新选择起始时间')
+            return false
+        }
+        
+        if(endTime.year<startTime.year ||endTime.month<startTime.month || endTime.date<startTime.date){
+            layer_shake('选课最早截止时间不能早于起始时间')
+            return false
+        }
+      }
+    }); 
+    
+    // 设置选课时间
+    $('#setClassTime').on('click touchend',function(){
+        if(!startTime || !endTime){
+            layer_shake('请先重新选择时间')
+            return false
+        }
+        
+        if(endTime.year<startTime.year ||endTime.month<startTime.month || endTime.date<startTime.date){
+            layer_shake('选课截止时间不能早于起始时间')
+            return false
+        }
+        
+        
+        $.ajax({
+            url:url.setClassTime,
+            type:'post',
+            data:{
+                start_time,
+                end_time,
+                start_time_data:JSON.stringify(startTime),
+                end_time_data:JSON.stringify(endTime)
+            },
+            dataType:'json',
+            success:res=>{
+                console.log(res)
+                if(res.status == 1){
+                    layer_success(res.info)
+                    setTimeout(()=>{ location.reload() },800)
+                }else{
+                    layer_shake(res.info)
+                }
+            }
+        });
+        
+    })
+    
+    
+    $('.class_timer').on('change',function(){
+        console.log($(this).val())
+    })
+    
+	/*课程-筛选*/
+	$('#select_condition').on('click touchend',function(){
+	    let cyear = $('#cyear').val()
+	    let college = $('#college').val()
+	    let major = $('#major').val()
+	    
+	     $.ajax({
+            url:url.accordConditionSearchCourse,
+            type:'post',
+            data:{cyear,college,major},
+            dataType:'json',
+            success:res=>{
+                console.log(res)
+                if(res.status == 1){
+                    layer_success(res.info)
+                    
+                    let html ='';
+        			let array=[];
+        			if(!(res.data instanceof Array)){
+        			    for (var i in res.data) {
+                            array.push(res.data[i]); 
+                        }
+        			}else{
+        			    array = res.data
+        			}
+        			
+        			array.forEach(item =>{
+        			    html +=`
+        			        <tr class="text-c">
+    							<td><input type="checkbox" class="checked_delete" uniqueId="${item.cid}" name=""></td>
+    							<td>${item.cid}</td>
+    							<td>${item.cname}</td>
+    							<td>${item.teacher}</td>
+    							
+    							<td>${item.selected}</td>
+    							<td>${item.notselected}</td>
+    							<td>${item.number}</td>
+    						</tr>
+        			    `    
+        			})
+        		    $('tbody').html(html)
+                     
+                }else{
+                    layer_shake(res.info)
+                    $('tbody').html('')
+                }
+            }
+        });
+	    
+	})
+    
+    // 课程状态
+    $('#status_switch').on('switch-change', function (e, data) {
+        //   console.log(data.value);
+          if(data.value) $('#status').val('1')
+          else $('#status').val('0')
+    });
+        
+    // 提交课程信息
+    $('#submitCourseAddFrom').click(function(){
+        
+        
+        let cname = $('#cname').val().trim()
+        let score = $('#score').val().trim()
+        let number = $('#number').val().trim()
+        
+        if(cname.length==0 || score.length ==0 || number.length == 0){
+            layer_shake('请检查表单信息是否填写完整')
+            return false
+        }
+        if(score>100 || score<0){
+            layer_shake('请输入规范的学分')
+            return false
+        }
+        
+        $.ajax({
+            url:url.addCourse,
+            type:'post',
+            data:$('#form-course-add').serialize(),
+            dataType:'json',
+            success:res=>{
+                console.log(res)
+                if(res.status == 1){
+                    layer_success(res.info)
+                    setTimeout(function() {location.reload()}, 800);
+                }else{
+                    layer_shake(res.info)
+                }
+            }
+        });
+    })
+    
+    // 根据id删除课程信息
+    $(document).on('click touchend','#deleteCourse',function(){
+        let cid = $(this).attr('uniqueId')
+        layer.confirm('确认要删除吗？',function(index){
+            $.ajax({
+                url:url.deleteCourse,
+                type:'post',
+                data:{cid},
+                dataType:'json',
+                success:res=>{
+                    console.log(res)
+                    if(res.status == 1){
+                        layer_success(res.info)
+                        setTimeout(function() {location.reload()}, 800);
+                    }else{
+                        layer_noChange(res.info)
+                    }
+                }
+            });
+    	});
+    })
+    
+    // 课程-编辑 根据id获取对应课程信息
+    $(document).on('click touchend','#editCourse',function(){
+        $('#showCourse').addClass('hui-bounceoutT').hide()
+        $('#editCourseFrom').removeClass('hui-bounceoutT').addClass('hui-bounceinB').show()
+        
+        let cid = $(this).attr('uniqueId')
+        $.ajax({
+            url:url.getCourseOne,
+            type:'post',
+            data:{cid},
+            dataType:'json',
+            success:res=>{
+                console.log(res)
+                if(res.status == 1){
+                    $('#submitCourseEditFrom').attr('uniqueId',res.data.cid)
+                    $('#submitCourseEditFrom').attr('oldCname',res.data.cname)
+                    $('#edit_cname').val(res.data.cname)
+                    $('#edit_score').val(res.data.score)
+                    $('#edit_number').val(res.data.number)
+                    
+                    $('#edit_cyear_'+res.data.cyear).prop('selected',true)
+                    $('#edit_major_'+res.data.major).prop('selected',true)
+                    $('#edit_college_'+res.data.college).prop('selected',true)
+                        
+                }else{
+                    layer_noChange(res.info)
+                }
+            }
+        });
+        
+        
+    })
+    
+    // 取消课程-编辑
+    $('#backCourseEditInfo').on('click touchend',function(){
+        location.reload()
+    })
+    
+    // 提交编辑课程信息
+    $('#submitCourseEditFrom').click(function(){
+        let flag; //判断账号是否改变
+        
+        let cname = $('#edit_cname').val().trim()
+        let score = $('#edit_score').val().trim()
+        let number = $('#edit_number').val().trim()
+        
+        if(cname.length==0 || score.length ==0 || number.length ==0){
+            layer_shake('请检查表单信息是否填写完整')
+            return false
+        }
+        if(score>100 || score<0){
+            layer_shake('请输入规范的学分')
+            return false
+        }
+		
+		
+		// 与原账号相同就flag = 1 否则 flag = 0
+        if($(this).attr('oldCname')==cname){
+            flag = 1
+        }else{
+            flag = 0
+        }
+        
+        let cid = $(this).attr('uniqueId')
+        $.ajax({
+            url:url.editCourse+'?cid='+cid+'&flag='+flag,
+            type:'post',
+            data:$('#form-course-edit').serialize(),
+            dataType:'json',
+            success:res=>{
+                console.log(res)
+                if(res.status == 1){
+                    layer_success(res.info)
+                    setTimeout(function(){ location.reload() }, 800)
+                }else{
+                    layer_noChange(res.info)
+                }
+            }
+        });
+    })
+    
+    // 启用 禁用课程
+    $(document).on('click touchend','.editCourseStatus',function(){
+        let cid = $(this).attr('uniqueId')
+        let status =  $(this).attr('status')
+        status = status == 1 ? 0:1
+        $.ajax({
+            url:url.editCourseStatus,
+            type:'post',
+            data:{
+                cid,status
+            },
+            dataType:'json',
+            success:res=>{
+                console.log(res)
+                if(res.status == 1){
+                    layer_success(res.info)
+                    setTimeout(function(){ location.reload() }, 800)
+                }else{
+                    layer_danger(res.info)
+                }
+            }
+        });
+    })
+    
+    // 搜索功能
+    $('.searchCourse').on('click touchend',function(){
+        let value = $(this).parent().find('.search').val().trim()
+        
+        $.ajax({
+			url:"{:url('Index/searchCourse')}",
+			data:{value},
+			type:"post",
+			dataType:"json",
+			success:function(res){
+			    console.log(res)
+				if(res.status==1){
+					layer_success(res.info);
+					
+					let html ='';
+        			let array=[];
+        			if(!(res.data instanceof Array)){
+        			    for (var i in res.data) {
+                            array.push(res.data[i]); 
+                        }
+        			}else{
+        			    array = res.data
+        			}
+        			
+        			array.forEach(item =>{
+        			    html +=`
+        			        <tr class="text-c">
+    							<td><input type="checkbox" class="checked_delete" uniqueId="${item.cid}" name=""></td>
+    							<td>${item.cid}</td>
+    							<td>${item.cname}</td>
+    							<td>${item.teacher}</td>
+    							
+    							<td>${item.selected}</td>
+    							<td>${item.notselected}</td>
+    							<td>${item.number}</td>
+    						</tr>
+        			    `    
+        			})
+        		    $('tbody').html(html)
+				    
+				}else{
+					layer_noChange(res.info);
+					$('tbody').html('')
+				}
+			}
+		});
+    })
+    
+    // 获取选中的课程id
+    $('tbody').on('change','.checked_delete',function(){
+        let cid = [];
+        $.each($('input:checkbox:checked'),function(){
+            cid.push($(this).attr('uniqueId'))
+        })
+        $('#deleteCourseMuch').attr('uniqueIds',cid)
+    })
+    
+    // 批量删除
+    $('#deleteCourseMuch').click(function(){
+        if(!$(this).attr('uniqueIds')){
+            layer_noChange('请先选择数据')
+            return false
+        }
+            
+        let cid = $(this).attr('uniqueIds')
+        layer.confirm('确认要批量删除吗？',function(index){
+            $.ajax({
+    			url:"{:url('Index/deleteCourseMuch')}",
+    			data:{cid},
+    			type:"post",
+    			dataType:"json",
+    			success:function(res){
+    				if(res.status==1){
+    					layer_success(res.info);
+    					setTimeout(function(){ location.reload() },800)
+    				}else{
+    					layer_danger(res.info);
+    				}
+    			}
+    		});
+        });
+    })
+});
+
+		
+</script>
+{/block}

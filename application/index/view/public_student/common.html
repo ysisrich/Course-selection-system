@@ -1,0 +1,143 @@
+
+<script type="text/javascript" charset="utf-8">
+    
+    // 路由信息 
+    let url = {
+        // 个人中心
+        getPersonalInformation:"{:url('Student/getPersonalInformation')}",
+        logout:"{:url('Student/logout')}",
+        changeSkin:"{:url('Student/changeSkin')}",
+        updateBaseInfo:"{:url('Student/updateBaseInfo')}",
+        modifyPassword:"{:url('Student/modifyPassword')}",
+        updatePassword:"{:url('Student/updatePassword')}",
+        
+        // 课程浏览
+        selectCourse:"{:url('Student/selectCourse')}", // 渲染页面
+        selectCourseCount:"{:url('Student/selectCourseCount')}", // 选择课程
+        
+        // 我的课程
+        myCourse:"{:url('Student/myCourse')}", // 渲染页面
+        
+        // 成绩查阅
+        gradeCourse:"{:url('Student/gradeCourse')}", // 渲染页面
+        
+        // 课程评价
+        evaluateCourse:"{:url('Student/evaluateCourse')}", // 渲染页面
+        submitCourseEvaluate:"{:url('Student/submitCourseEvaluate')}", // 提交课程评价
+        
+        // 教师评价
+        evaluateTeacher:"{:url('Student/evaluateTeacher')}", // 渲染页面
+        submitTeacherEvaluate:"{:url('Student/submitTeacherEvaluate')}", // 提交教师评价
+        
+    }
+    
+    
+    // 浏览选择课程
+    $('#select_course').on('click touchend',function(){
+        location.href = url.selectCourse
+    })
+    // 我的课程
+    $('#my_course').on('click touchend',function(){
+        location.href = url.myCourse
+    })
+    // 成绩查阅
+    $('#grade_course').on('click touchend',function(){
+        location.href = url.gradeCourse
+    })
+    // 课程评价
+    $('#evaluate_course').on('click touchend',function(){
+        location.href = url.evaluateCourse
+    })
+    // 教师评价
+    $('#evaluate_teacher').on('click touchend',function(){
+        location.href = url.evaluateTeacher
+    })
+    
+    NProgress.configure({
+        // speed: 500,  // 递增进度条的速度    
+        showSpinner: true, // 是否显示加载ico    
+        // trickleSpeed: 200, // 自动递增间隔    
+        // minimum: 0.3 // 初始化时的最小百分比
+    });
+    // 在ajax请求开始  进度条显示
+    $(document).ajaxStart(function(){
+    // $(window).ajaxStart(function(){
+        NProgress.start();
+    });
+    // ajax请求结束  进度条结束
+    $(document).ajaxStop(function(){
+        NProgress.done();
+    });
+    
+    
+    // 当用户超过15分钟未在该系统操作时，自动退出
+    logout();
+    function logout(){
+        setTimeout(function(){
+            $.ajax({
+				url:url.logout,
+				type:"post",
+				dataType:'json',
+				success:res=>{
+					if(res.status == 1){
+				// 		location.href = "{:url('Index/login/index')}"
+					}
+				}
+			})
+        },15*60*1000)
+    }
+
+	// 安全退出
+	$('.logout').on('click touchend',function(){
+		layer.confirm('确认退出?',{icon:2},function(){
+			$.ajax({
+				url:url.logout,
+				type:"post",
+				dataType:'json',
+				success:res=>{
+					if(res.status == 1){
+						location.href = "{:url('Index/login/index')}"
+					}
+				}
+			})
+		});
+	})
+	
+	// 改变皮肤
+		$('.colors').on('click','li',function(){
+			// console.log($(this).index())
+			let index = $(this).index()
+			$.ajax({
+				url:url.changeSkin,
+				data:{
+					index
+				},
+				type:"post",
+				dataType:"json",
+				success:res=>{
+					if(res.status == 1){
+					    setTimeout(function() {location.reload()}, 800);
+						layer_success('换肤成功')
+					}else{
+						layer_danger('换肤失败')
+					}
+				}
+			});
+		})
+        
+        // 伸缩展开侧边栏
+        $(document).on('click touchend','.switch-icon',function(){
+            if($(this).hasClass("open")){
+        		$(this).removeClass("open");
+        		$("body").removeClass("big-page");
+        		$('.switch').html('&#xe678;');
+        		$('#switch').css({'left':'auto','color':'#FFF'})
+        	} else {
+        		$(this).addClass("open");
+        		$("body").addClass("big-page");
+        		$('.switch').html('&#xe67a;');
+        		$('#switch').css({'left':0,'color':'blue'})
+        	}
+            
+        })
+</script>

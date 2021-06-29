@@ -1,0 +1,307 @@
+{extend name="public/default" /}
+
+{block name="title"}
+<title>选课系统-管理员</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .title{
+        text-align: center;
+        color: {$config_color}; 
+        font-size: 25px;
+        font-weight: 600;
+    }
+    .dowebok{
+        text-align: center;
+        margin: 120px auto;
+    }
+    .flipTimer .digit > div.digit-top, .flipTimer .digit > div.shadow-top {
+        background-color: {$config_color};
+        border-bottom: 1px solid {$config_color};
+    }
+    .flipTimer .digit > div.digit-bottom, .flipTimer .digit > div.shadow-bottom {
+          background-color: {$config_color};
+    }
+    .data{
+        display: flex;
+    }
+    
+    /*.clearfix:after{content:"\20";display:block;height:0;clear:both;visibility:hidden}.clearfix{zoom:1}*/
+    /*.tabBar {border-bottom: 2px solid #222}*/
+    /*.tabBar span {background-color: #e8e8e8;cursor: pointer;display: inline-block;float: left;font-weight: bold;height: 30px;line-height: 30px;padding: 0 15px}*/
+    /*.tabBar span.current{background-color: #222;color: #fff}*/
+    /*.tabCon {display: none}*/
+    #tab_demo{
+        width: 100%;
+    }
+    .tabCon{
+        padding: 10px;
+    }
+    
+    .textarea{
+        height: 300px;
+        padding: 6px;
+    }
+
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">邮件管理</span>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">发送邮件</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a></nav>
+	<div class="Hui-article" style="display:{$isPower?'':'none'}">
+	<article class="cl pd-20 data manage hui-bounceinB">
+	    
+	    <div id="tab_demo" class="HuiTab">
+          <div class="tabBar clearfix"><span>使用系统邮箱</span><span>使用个人邮箱</span></div>
+          
+          <!--使用系统邮箱-->
+          <div class="tabCon">
+    		    <!--<div class="Huialert Huialert-success" style="text-align: center;margin: 20px auto;line-height: 30px;"><i class="Hui-iconfont" >&#xe6a6;</i>提示 ： 1、姓名、登录账号、密码为必填项。2、登录账号不能与已存在的帐号重复。 3、其他为选填项！</div>-->
+    			<form  class="form form-horizontal" id="form-maile-add" >
+            		<div class="row cl">
+            			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>收件人：</label>
+            			<div class="formControls col-xs-8 col-sm-9">
+            				<input type="text" class="input-text" value="" autocomplete="off" placeholder="请输入收件人邮箱" id="maile"  name="maile">
+            			</div>
+            		</div>
+            		<div class="row cl">
+            			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>主题：</label>
+            			<div class="formControls col-xs-8 col-sm-9">
+            				<input type="text" class="input-text" value="" autocomplete="off"  placeholder="请输入主题" id="subject"  name="subject">
+            			</div>
+            		</div>
+            		<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-3">附件：</label>
+						<div class="formControls col-xs-8 col-sm-9"> 
+						    <span class="btn-upload form-group">
+    							<input class="input-text upload-url" type="text" placeholder="添加附件（限单个文件）" name="uploadfile-2" id="uploadfile-2" readonly="">
+    							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont"></i> 浏览文件</a>
+    							<input type="file" multiple="" id="upload" name="uploadFile" class="input-file">
+							</span> 
+						</div>
+					</div>
+            		<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>正文：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<textarea class="textarea" placeholder="说点什么..." id="content" name=""></textarea>
+						</div>
+					</div>
+            		
+            		<div class="row cl">
+            			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+            				<!--<input class="btn btn-primary radius" id="backManagerInfo" type="button" value="&nbsp;&nbsp;清空&nbsp;&nbsp;">-->
+            				<input class="btn btn-primary radius" id="submit" type="button" value="&nbsp;&nbsp;发送&nbsp;&nbsp;">
+            			</div>
+            		</div>
+            	</form>
+          </div>
+          
+          <!--使用个人邮箱-->
+          <div class="tabCon">
+                <form  class="form form-horizontal" id="form-maile-add1" >
+                    <div class="row cl">
+            			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>发件人：</label>
+            			<div class="formControls col-xs-8 col-sm-9">
+            				<input type="text" class="input-text" value="" autocomplete="off" placeholder="请输入个人邮箱" id="sent"  name="sent">
+            			</div>
+            		</div>
+            		<div class="row cl">
+            			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>SMTP密码：</label>
+            			<div class="formControls col-xs-8 col-sm-9">
+            				<input type="text" class="input-text" value="" autocomplete="off" placeholder="请输入SMTP密码" id="pw"  name="pw">
+            			</div>
+            		</div>
+            		<div class="row cl">
+            			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>收件人：</label>
+            			<div class="formControls col-xs-8 col-sm-9">
+            				<input type="text" class="input-text" value="" autocomplete="off" placeholder="请输入收件人邮箱" id="maile1"  name="maile">
+            			</div>
+            		</div>
+            		<div class="row cl">
+            			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>主题：</label>
+            			<div class="formControls col-xs-8 col-sm-9">
+            				<input type="text" class="input-text" value="" autocomplete="off"  placeholder="请输入主题" id="subject1"  name="subject">
+            			</div>
+            		</div>
+            		<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-3">附件：</label>
+						<div class="formControls col-xs-8 col-sm-9"> 
+						    <span class="btn-upload form-group">
+    							<input class="input-text upload-url" type="text" placeholder="添加附件（限单个文件）" name="uploadfile-2" id="uploadfile-2" readonly="">
+    							<a href="javascript:void();" class="btn btn-primary upload-btn"><i class="Hui-iconfont"></i> 浏览文件</a>
+    							<input type="file" multiple="" id="upload1" name="uploadFile" class="input-file">
+							</span> 
+						</div>
+					</div>
+            		<div class="row cl">
+						<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>正文：</label>
+						<div class="formControls col-xs-8 col-sm-9">
+							<textarea class="textarea" placeholder="说点什么..." id="content1" name=""></textarea>
+						</div>
+					</div>
+            		
+            		<div class="row cl">
+            			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+            				<!--<input class="btn btn-primary radius" id="backManagerInfo" type="button" value="&nbsp;&nbsp;清空&nbsp;&nbsp;">-->
+            				<input class="btn btn-primary radius" id="submit1" type="button" value="&nbsp;&nbsp;发送&nbsp;&nbsp;">
+            			</div>
+            		</div>
+            	</form>
+          </div>
+        </div>
+	    
+    </article>
+</div>
+
+    <!--无权查看显示-->
+	<div class="nopower" style="display:{$isPower?'none':''}">
+	    <img  src="__PUBLIC__/img/noPower.jpg" alt="" />
+	</div>
+</section>
+{/block}
+
+{block name="script"}
+
+{load href="__PUBLIC__/js/echarts.min.js"/}
+
+<script type="text/javascript">
+$(function(){
+    $("#tab_demo").Huitab({
+			index:0
+	});
+    
+    // 附件
+    $('#upload,#upload1').on('change',function(e){
+        console.log(this.files[0])
+        let file = this.files[0]
+        let that = this
+        var formData = new FormData();
+    	formData.append('uploadFile',this.files[0]);
+        
+        $.ajax({
+        	url:url.upload,
+        	data:formData,
+        	type:"post",
+        	contentType: false,
+            // 告诉jQuery不要去设置Content-Type请求头
+            processData: false,
+            // 告诉jQuery不要去处理发送的数据
+        	success:function(res){
+        	    console.log(res)
+        		if(res.status==1){
+        			$(that).attr('url','/www/wwwroot/www.yangsong.cool/public/uploads/' + res.url) 
+        		}else{
+        			layer_danger(res.info);
+        		}
+        	},
+        	error:err=>{
+        	    console.log(err)
+        	}
+        });
+    })
+    
+    // 发送邮件
+    $('#submit').on('click touchend',function(){
+        
+        let maile = $('#maile').val().trim();
+        let subject = $('#subject').val().trim();
+        let content = $('#content').val().trim();
+        let attachment = $('#upload').attr('url') || null;
+        console.log(attachment)
+        let email_reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+        
+        if(maile.length == 0 || subject.length == 0 || content.length == 0){
+            layer_shake('将表单信息补充完整！')
+            return false
+        }
+        
+        if(!email_reg.test(maile)){
+            layer_shake('邮箱格式不对！')
+            return false
+        }
+        
+        $.ajax({
+        	url:url.sendMail,
+        	data:{
+        	    maile,subject,content,attachment
+        	},
+        	type:"post",
+        	dataType:"json",
+        	success:function(res){
+        	    console.log(res)
+        		if(res.status==1){
+        			layer_success(res.info);
+        			setTimeout(function(){ location.reload() },800)
+        		}else{
+        			layer_danger(res.info);
+        		}
+        	},
+        	error:err=>{
+        	    console.log(err)
+        	}
+        });
+    });
+    
+    
+    
+    // 使用个人邮箱 发送邮件
+    $('#submit1').on('click touchend',function(){
+        
+        let sent = $('#sent').val().trim()
+        let pw = $('#pw').val().trim()
+        let maile1 = $('#maile1').val().trim();
+        let subject1 = $('#subject1').val().trim();
+        let content1 = $('#content1').val().trim();
+        let attachment1 = $('#upload1').attr('url') || null;
+        console.log(attachment1)
+        let email_reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+        
+        if(maile1.length == 0 || subject1.length == 0 || content1.length == 0 || pw.length == 0 || sent.length == 0){
+            layer_shake('将表单信息补充完整！')
+            return false
+        }
+        
+        if(!email_reg.test(maile1) || !email_reg.test(sent)){
+            layer_shake('发件人或收件人邮箱格式不对！')
+            return false
+        }
+        
+        $.ajax({
+        	url:url.sendMail1,
+        	data:{
+        	   sent,pw, maile1,subject1,content1,attachment1
+        	},
+        	type:"post",
+        	dataType:"json",
+        	success:function(res){
+        	    console.log(res)
+        		if(res.status==1){
+        			layer_success(res.info);
+        			setTimeout(function(){ location.reload() },800)
+        		}else{
+        			layer_danger(res.info);
+        		}
+        	},
+        	error:err=>{
+        	    console.log(err)
+        	}
+        });
+    });
+    
+    
+})
+
+
+		
+</script>
+{/block}

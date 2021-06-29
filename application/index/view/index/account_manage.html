@@ -1,0 +1,289 @@
+{extend name="public/default" /}
+
+{block name="title"}
+
+<title>选课系统-管理员</title>
+</head>
+<body>
+    
+    <style type="text/css" media="all">
+    
+        .Hui-article{
+            background: #F2F2F2;
+        }
+        .manage{
+            background: #fff;
+            box-shadow:0 0 10px rgba(0,0,0,0.16);
+        }
+        .search{ 
+            width: 250px;
+            /*min-width: 100px;*/
+        }
+        .dataTables_wrapper .dataTables_filter {
+            display: none;    
+        }
+        
+        .check-box, .radio-box {
+             padding-left: 0 ;
+        }
+        .enableEdit{
+            cursor: pointer;
+        }
+        
+        /*号码验证*/
+        .phone_check{
+            margin: 0 5px;
+            color: blue;
+            cursor: pointer;
+        }
+        .not{
+            cursor: not-allowed;
+        }
+        .modal{
+            top:20%;
+        }
+        .modal-dialog {
+            width: 550px !important;
+        }
+        .checked{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            margin: 5px auto;
+            /*background: red;*/
+            display: flex;
+        }
+        .checked .checked_label{
+            flex: 1;
+            color: rgba(0,0,0,.4);
+        }
+        .checked .checked_value{
+            flex: 5;
+        }
+        /*.input-text, .textarea{*/
+        /*    width: auto;*/
+        /*}*/
+        .input-text[type="number"] {
+            width: 150px;
+        }
+        
+        /*去除input[number] 默认样式*/
+        ::-webkit-inner-spin-button {
+           -webkit-appearance: none;
+        }
+        .l {
+            display: flex;
+        }
+        .select-box, .select-box.size-M {
+            padding: 4px 5px;
+            margin: 0 5px;
+            width: 150px;
+        }
+    </style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">用户管理</span>  
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">账户管理</span> 
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a>
+	</nav>
+	
+	<div class="Hui-article" style="display:{$isPower?'':'none'}">
+	    <!--用户信息表格-->
+		<article class="cl pd-20 manage hui-bounceinB" id="showManagers">
+			<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+			    <span class="l">
+			        <span class="select-box">
+                      <select class="select" size="1" id="type" name="type">
+                        <option value="3">全部</option>
+                        <option value="0">管理员</option>
+                        <option value="1">学生</option>
+                        <option value="2">教师</option>
+                      </select>
+                    </span>
+			        <a href="javascript:;" class="btn btn-primary radius" id="select_condition"><i class="Hui-iconfont">&#xe600;</i> 筛选</a>
+			    </span> 
+			    <span class="r hidden-xs">
+                    <input type="text" class="input-text search" placeholder="账号"  name="">
+				    <button type="submit" class="btn btn-success radius searchAccountUser" ><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>			        
+			    </span>
+			    <!--<span class="r">共有数据：<strong>88</strong> 条</span> -->
+			</div>
+			<div class="cl pd-5 bg-1 bk-gray mt-20 visible-xs"> 
+			    <span class="l">
+                    <input type="text" class="input-text search" style="width:200px" placeholder="账号"  name="">
+				    <button type="submit" class="btn btn-success radius searchAccountUser"  name=""><i class="Hui-iconfont">&#xe665;</i> 搜用户</button>			        
+			    </span>
+			</div>
+			
+			<!--用户信息表格-->
+			<div class="mt-20">
+				<table class="table table-border table-bordered table-hover table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="25"><input type="checkbox" disabled name="" value=""></th>
+							<th width="">ID</th>
+							<th width="">账号</th>
+							<th width="">密码(已加密)</th>
+							<th width="">身份</th>
+						</tr>
+					</thead>
+					<tbody>
+					    
+					    {volist name="users" id="vo"}
+    						<tr class="text-c">
+    							<td><input type="checkbox" class="checked_delete" uniqueId="{$vo.id}" name=""></td>
+    							<td>{$vo.id}</td>
+    							<td>{$vo.account}</td>
+    							<td>{$vo.password}</td>
+    							<td>{if condition="$vo.type eq 0"}管理员{elseif condition="$vo.type eq 1"}学生{else/}教师{/if}</td>
+    						</tr>
+						{/volist}
+						
+					</tbody>
+				</table>
+			</div>
+			
+		</article>
+
+	</div>
+	
+	<!--无权查看显示-->
+	<div class="nopower" style="display:{$isPower?'none':''}">
+	    <img  src="__PUBLIC__/img/noPower.jpg" alt="" />
+	</div>
+	
+</section>
+
+{/block}
+
+{block name="script"}
+
+
+<script type="text/javascript">
+
+$(function(){
+    
+    $('.table-sort').dataTable({
+		"aaSorting": [[ 1, "asc" ]],//默认第几个排序
+		"bStateSave": true,//状态保存
+		"aoColumnDefs": [
+		  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+		  {"orderable":false,"aTargets":[0,2,3,4]}// 制定列不参与排序
+		]
+	});
+	$('.table-sort tbody').on( 'click', 'tr', function () {
+		if ( $(this).hasClass('selected') ) {
+			$(this).removeClass('selected');
+		}
+		else {
+			$('tr.selected').removeClass('selected');
+			$(this).addClass('selected');
+		}
+	});
+	
+	
+	
+    // 	按身份筛选
+    $('#select_condition').click(function(){
+        console.log($('#type').val())
+        let value = $('#type').val()
+        
+        $.ajax({
+			url:"{:url('Index/selectCondition')}",
+			data:{value},
+			type:"post",
+			dataType:"json",
+			success:function(res){
+			    console.log(res)
+				if(res.status==1){
+					layer_success(res.info);
+					
+					let html ='';
+					res.data.forEach(i=>{
+					    if(i.type == 0) 
+					        i.type ='管理员'
+					    else if(i.type == 1)
+					        i.type = '学生'
+					    else
+					        i.type = '教师'
+					})
+					let r = res.data
+					r.forEach(item =>{
+					    html +=`
+					        <tr class="text-c">
+    							<td><input type="checkbox" value="1" name=""></td>
+    							<td>${item.id}</td>
+    							<td>${item.account}</td>
+    							<td>${item.password}</td>
+    							<td>${item.type}</td>
+    						</tr>
+					    `    
+					})
+				    $('tbody').html(html)
+				    
+				}else{
+					layer_noChange(res.info);
+					$('tbody').html('')
+				}
+			}
+		});
+    })
+	
+    // 搜索功能
+    $('.searchAccountUser').click(function(){
+        let value = $(this).parent().find('.search').val().trim()
+        
+        $.ajax({
+			url:"{:url('Index/getAccountData')}",
+			data:{value},
+			type:"post",
+			dataType:"json",
+			success:function(res){
+			    console.log(res)
+				if(res.status==1){
+					layer_success(res.info);
+					
+					let html ='';
+					res.data.forEach(i=>{
+					    if(i.type == 0) 
+					        i.type ='管理员'
+					    else if(i.type == 1)
+					        i.type = '学生'
+					    else
+					        i.type = '教师'
+					})
+					let r = res.data
+					r.forEach(item =>{
+					    html +=`
+					        <tr class="text-c">
+    							<td><input type="checkbox" value="1" name=""></td>
+    							<td>${item.id}</td>
+    							<td>${item.account}</td>
+    							<td>${item.password}</td>
+    							<td>${item.type}</td>
+    						</tr>
+					    `    
+					})
+				    $('tbody').html(html)
+				    
+				}else{
+					layer_noChange(res.info);
+					$('tbody').html('')
+				}
+			}
+		});
+    });
+    
+    
+})
+
+		
+</script>
+{/block}

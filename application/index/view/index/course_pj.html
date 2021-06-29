@@ -1,0 +1,117 @@
+{extend name="public/default" /}
+
+{block name="title"}
+<title>选课系统-管理员</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .title{
+        text-align: center;
+        color: {$config_color}; 
+        font-size: 25px;
+        font-weight: 600;
+    }
+    .dowebok{
+        text-align: center;
+        margin: 120px auto;
+    }
+    .flipTimer .digit > div.digit-top, .flipTimer .digit > div.shadow-top {
+        background-color: {$config_color};
+        border-bottom: 1px solid {$config_color};
+    }
+    .flipTimer .digit > div.digit-bottom, .flipTimer .digit > div.shadow-bottom {
+          background-color: {$config_color};
+    }
+    
+    /*隐藏datatable自带的搜索框*/
+    .dataTables_wrapper .dataTables_filter {
+        display: none;    
+    }
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">评价管理</span>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">课程评价</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a></nav>
+	<div class="Hui-article" style="display:{$isPower?'':'none'}">
+	    
+	<article class="cl pd-20 manage hui-bounceinB" id="showManagers">
+		 
+		<!--课程评价信息表格-->
+		<div class="mt-20">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="25"><input type="checkbox" disabled name="" value=""></th>
+						<th width="">ID</th>
+						<th width="">课程名称</th>
+						<th width="">学生姓名</th>
+						<th width="">评价内容</th>
+						<th width="">评分</th>
+						<th width="">评价时间</th>
+						
+						
+					</tr>
+				</thead>
+				<tbody>
+				    
+				    {volist name="coursepj" id="vo"}
+						<tr class="text-c">
+							<td><input type="checkbox" class="checked_delete" uniqueId="{$vo.id}" name=""></td>
+							<td>{$vo.id}</td>
+							<td>{$vo.course_name}</td>
+							<td>{$vo.student_name}</td>
+							<td>{$vo.content}</td>
+							<td>{$vo.score}</td>
+							<td>{$vo.create_time}</td>
+						</tr>
+					{/volist}
+					
+				</tbody>
+			</table>
+		</div>
+	</article>
+	
+</div>
+
+    <!--无权查看显示-->
+	<div class="nopower" style="display:{$isPower?'none':''}">
+	    <img  src="__PUBLIC__/img/noPower.jpg" alt="" />
+	</div>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+$(function(){
+	$('.table-sort').dataTable({
+		"aaSorting": [[ 1, "asc" ]],//默认第几个排序
+		"bStateSave": true,//状态保存
+		"aoColumnDefs": [
+		  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+		  {"orderable":false,"aTargets":[0,2,3,4,5,6]}// 制定列不参与排序
+		]
+	});
+	$('.table-sort tbody').on( 'click', 'tr', function () {
+		if ( $(this).hasClass('selected') ) {
+			$(this).removeClass('selected');
+		}
+		else {
+			$('tr.selected').removeClass('selected');
+			$(this).addClass('selected');
+		}
+	});
+});
+		
+</script>
+{/block}

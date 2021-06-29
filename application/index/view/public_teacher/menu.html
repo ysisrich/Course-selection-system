@@ -1,0 +1,40 @@
+<!--_menu 作为公共模版分离出去-->
+<aside class="Hui-aside">
+	
+	<div class="menu_dropdown bk_2">
+	    <dl id="menu-article" class="visible-xs">
+			<dt class="config_hover" style="color: #fff;"><i class="Hui-iconfont">&#xe705;</i> 个人中心<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					<li><a href="{:url('Teacher/getPersonalInformation')}" >个人信息</a></li>
+					<li><a href="{:url('Teacher/modifyPassword')}" >修改密码</a></li>
+					<li class="logout"><a href="javascript:;" >安全退出</a></li>
+        		</ul>
+        	</dd>
+        </dl>
+        
+        <dl id="menu-system">
+			<dt id="school_notice" class="config_hover {in name='$selected_id' value='1' }selected_menus{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe64b;</i> 学校公告<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+        </dl>
+        
+       <dl id="menu-system">
+			<dt id="my_student" class="config_hover {in name='$selected_id' value='2' }selected_menus{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe695;</i> 学生浏览<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+        </dl>
+        
+        <dl id="menu-system">
+			<dt id="my_course" class="config_hover {in name='$selected_id' value='3' }selected_menus{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe720;</i> 我的课程<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+        </dl>
+        
+        <dl id="menu-system">
+			<dt id="my_maile" class="config_hover {in name='$selected_id' value='4' }selected{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe68a;</i> 邮件管理<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>
+        </dl>
+        
+   <!--     <dl id="menu-system">-->
+			<!--<dt id="grade_course" class="config_hover {in name='$selected_id' value='3' }selected_menus{/in} " style="color: #fff;"><i class="Hui-iconfont">&#xe6c6;</i> 成绩查阅<i class="Hui-iconfont menu_dropdown-arrow"></i></dt>-->
+   <!--     </dl>-->
+        
+		
+</div>
+</aside>
+<!--<div class="dislpayArrow hidden-xs config_color"><a class="pngfix" href="javascript:void(0);" onClick="displaynavbar(this)"></a></div>-->
+<!--<div class="dislpayArrow hidden-xs config_color"><a id="switch"  href="javascript:void(0);" onClick="displaynavbars(this)"><i class="Hui-iconfont switch">&#xe678;</i></a></div>-->

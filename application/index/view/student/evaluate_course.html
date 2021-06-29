@@ -1,0 +1,205 @@
+{extend name="public_student/default" /}
+
+{block name="title"}
+<title>选课系统-学生</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .title{
+        text-align: center;
+        color: {$config_color}; 
+        font-size: 25px;
+        font-weight: 600;
+    }
+    .Hui-article{
+        background: #F2F2F2;
+    }
+    .manage{
+        background: #fff;
+        box-shadow:0 0 10px rgba(0,0,0,0.16);
+    }
+    .dowebok{
+        text-align: center;
+        margin: 120px auto;
+    }
+    .dataTables_wrapper .dataTables_filter {
+        display: none;    
+    }
+    .flipTimer .digit > div.digit-top, .flipTimer .digit > div.shadow-top {
+        background-color: {$config_color};
+        border-bottom: 1px solid {$config_color};
+    }
+    .flipTimer .digit > div.digit-bottom, .flipTimer .digit > div.shadow-bottom {
+          background-color: {$config_color};
+    }
+    
+    /*未开放选课*/
+    .nocourse{
+        width: 100%;
+        height: 100%;
+    }
+    .nocourse img{
+        width: 100%;
+        height: 100%;
+    }
+    .Huialert {
+        height: 33px;
+        line-height: 34px;
+    }
+    .pj{
+        width: 100%;
+        height: 100px;
+        margin: 20px 0px 10px;
+        resize: vertical;
+        font-size: 15px;
+        padding: 6px;
+        box-sizing: border-box;
+        border-radius: 3px;
+        min-height: 50px;
+        max-height: 200px;
+        /*border-color: black;*/
+    }
+    .pj_btn{
+        display: flex;
+        justify-content:;
+    }
+    .pj_btn div{
+        flex: 1;
+    }
+    .pj_btn div:nth-child(2){
+        text-align: right;
+    }
+    .commentList .item {
+         padding-right: 0px; 
+    }
+    .avgScore{
+        margin-left: 20px;
+        color: #aaa;
+    }
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">课程评价</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a>
+	</nav>
+	
+	<div class="Hui-article">
+	<article class="cl pd-20 manage hui-bounceinB">
+	    课程名称：{if condition="$course neq null"}{$course['cname']} <span class="avgScore">最终评价{$courseAvg | default = ' 暂无 '}分</span> {/if}
+	    
+	    <div class="text">
+	        <textarea class="pj textarea" placeholder="请填写您对该课程的评价（限制200字）" maxlength="200"></textarea>
+	    </div>
+	    
+	    <div class="pj_btn">
+	        <div class="clearfix">
+            	<span class="f-l f-15 va-m">评分：</span>
+            	<div id="star-1" class="star-bar size-M f-l mr-10 va-m"></div>
+            	<strong id="result-1" class="f-l va-m"></strong>
+            </div>
+            <div>
+                <input class="btn btn-success radius" id="comment" type="button" value="发表">
+            </div>
+	    </div>
+	    
+        
+	   {if condition="$coursepjs neq null"}
+	   <ul class="commentList">
+	       {volist name="$coursepjs" id="vo"}
+          <li class="item cl"> <a href="javascript:;"><i class="avatar size-L radius">{if condition="$vo.student_info['sex'] eq 1"}<img alt="" src="__PUBLIC__/img/boyAvatar.png">{else/}<img alt="" src="__PUBLIC__/img/girlAvatar.png">{/if}</i></a>
+            <div class="comment-main">
+              <header class="comment-header">
+                <div class="comment-meta">
+                  <a class="comment-author" href="javascript:;">{$vo.student_info['name']}</a> 
+                  评论于 <time >{$vo.create_time}</time>
+                  <span >评分({$vo.score})</span>
+                </div>
+              </header>
+              <div class="comment-body">
+                <p> {$vo.content}</p>
+              </div>
+            </div>
+          </li>
+          {/volist}
+        </ul>
+		{/if}
+            
+    </article>
+
+</div>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+$(function(){
+
+	var score;
+	$("#star-1").raty({
+		hints: ['1','2', '3', '4', '5'],//自定义分数
+		starOff: 'iconpic-star-S-default.png',//默认灰色星星
+		starOn: 'iconpic-star-S.png',//黄色星星
+		path: '__PUBLIC__/plugins/h-ui-admin/static/h-ui/images/star',//可以是相对路径
+		number: 5,//星星数量，要和hints数组对应
+		showHalf: true,
+		targetKeep : true,
+		click: function (s, evt) {
+		    score = s;
+			$("#result-1").html('你的评分是'+s+'分');
+		}
+	});
+	
+	
+    // 	发表评论
+    $('#comment').on('click touchend',function(){
+        let content = $('.textarea').val()
+        {if condition="$course neq null"} 
+            let course = {$course['cid']};
+        {else/}
+            let course = null;
+        {/if}
+        if(!course){
+            layer_shake('当前未选课程，无法评价！')
+            return false
+        }
+        if(content.trim().length <10){
+            layer_shake('评价内容至少10字以上！')
+            return false
+        }
+        if(!score){
+            layer_shake('不要忘记打分哦！')
+            return false
+        }
+        
+        $.ajax({
+            url:url.submitCourseEvaluate,
+            type:'post',
+            data:{course,content,score},
+            dataType:'json',
+            success:res=>{
+                console.log(res)
+                if(res.status == 1){
+                    layer_success(res.info)
+                    setTimeout(function() {location.reload()}, 800);
+                }else{
+                    layer_shake(res.info)
+                }
+            }
+        });
+        
+    })
+
+	
+});
+		
+</script>
+{/block}

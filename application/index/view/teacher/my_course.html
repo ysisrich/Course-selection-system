@@ -1,0 +1,237 @@
+{extend name="public_teacher/default" /}
+
+{block name="title"}
+<title>选课系统-教师</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .title{
+        text-align: center;
+        color: {$config_color}; 
+        font-size: 25px;
+        font-weight: 600;
+    }
+    .Hui-article{
+        background: #F2F2F2;
+    }
+    .manage{
+        background: #fff;
+        box-shadow:0 0 10px rgba(0,0,0,0.16);
+    }
+    .dowebok{
+        text-align: center;
+        margin: 120px auto;
+    }
+    .dataTables_wrapper .dataTables_filter {
+        display: none;    
+    }
+    .flipTimer .digit > div.digit-top, .flipTimer .digit > div.shadow-top {
+        background-color: {$config_color};
+        border-bottom: 1px solid {$config_color};
+    }
+    .flipTimer .digit > div.digit-bottom, .flipTimer .digit > div.shadow-bottom {
+          background-color: {$config_color};
+    }
+    
+    /*弹出框*/
+    .modal{
+        top:10%;
+    }
+    .modal-dialog {
+        width: 550px !important;
+    }
+    
+     /*去除input[number] 默认样式*/
+    ::-webkit-inner-spin-button {
+       -webkit-appearance: none;
+    }
+    .input-text[type="number"] {
+        width: 100%;
+    }
+    
+    /*课程简介文本域*/
+    .course_detail{
+        width: 100%;
+        height: 80px;
+        resize: none;
+        font-size: 15px;
+        padding: 6px;
+        box-sizing: border-box;
+        border-radius: 3px;
+        max-height: 80px;
+    }
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">我的课程</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+	<article class="cl pd-20 manage hui-bounceinB">
+	    
+	     <!--我的课程信息表格-->
+			<div class="mt-20 ">
+				<table class="table table-border table-bordered table-hover table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="25"><input type="checkbox" disabled name="" value=""></th>
+							<th width="">ID</th>
+							<th width="">课程名称</th>
+							<th width="">简介</th>
+							<th width="">学分</th>
+							<th width="">专业</th>
+							<th width="">类型</th>
+							<th width="">学生人数</th>
+							<th width="">上课地点</th>
+							
+							<th width="">操作</th>
+						</tr>
+					</thead>
+					<tbody>
+					    
+					    	<tr class="text-c">
+    							<td><input type="checkbox" class="checked_delete" uniqueId="{$course.cid}" name=""></td>
+    							<td>{$course['cid']}</td>
+    							<td>{$course['cname']}</td>
+    							<td>{$course['detail'] | default="暂无"}</td>
+    							<td>{$course['score']}</td>
+                                <td>{$course['major_name']}</td> 
+                                <td>{if condition="$course.type eq 0"}线下{else/}线上{/if}</td> 
+                                <td>{$course['selected']}</td> 
+                                <td>{$course['place'] | default="暂无"}</td> 
+    							
+    							
+    							<td class="td-manage"> 
+        							<a  href="javascript:;" id="editCourseBaseInfo" uniqueId="{$course.cid}" class="ml-5" style="text-decoration:none;font-size:20px;"><span class="label label-success">编辑</span></a>
+        						</td>
+    						</tr>
+						
+					</tbody>
+				</table>
+			</div>
+			
+			<!--编辑课程基本信息表单-->
+    	    <div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            	<div class="modal-dialog">
+            		<div class="modal-content radius">
+            			<div class="modal-header">
+            				<h3 class="modal-title">编辑课程信息</h3>
+            				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+            			</div>
+            			<div class="modal-body">
+            				<div class="Huialert Huialert-success">提示：课程简介、类型、上课地点为必填项！</div>
+            				<form  class="form form-horizontal" id="form-course-set" >
+            				    <div class="row cl">
+                        			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>课程名称：</label>
+                        			<div class="formControls col-xs-8 col-sm-9">
+                        				<input type="text" class="input-text" value="{$course['cname']}" disabled placeholder="" id="name"  name="course_name">
+                        			</div>
+                        		</div>
+                				<div class="row cl">
+                        			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>简介：</label>
+                        			<div class="formControls col-xs-8 col-sm-9">
+                        				<textarea class="course_detail textarea" id="detail" name="detail" placeholder="请输入课程简介（限制50字）" maxlength="50">{$course['detail']}</textarea>
+                        				<!--<input type="number" class="input-text" value=""  placeholder="请输入课程简介" id="detail"  name="detail" >-->
+                        			</div>
+                        		</div>
+                        		<div class="row cl">
+                        			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>类型：</label>
+                        			<div class="formControls col-xs-8 col-sm-9  skin-minimal">
+                        				<div class="radio-box">
+                        					<input  type="radio" id="type-1" value="0"  name="type" {if condition="$course['type'] eq 0"}checked{/if}>
+                        					<label for="type-1">线下</label>
+                        				</div>
+                        				<div class="radio-box">
+                        					<input type="radio" id="type-2" value="1" name="type" {if condition="$course['type'] eq 1"}checked{/if}>
+                        					<label for="type-2">线上</label>
+                        				</div>
+                        			</div>
+                        		</div>
+                        		<div class="row cl">
+                        			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>上课地点：</label>
+                        			<div class="formControls col-xs-8 col-sm-9">
+                        				<input type="text" class="input-text" value="{$course['place']}"  placeholder="请输入课程上课地点" id="place"  name="place" >
+                        			</div>
+                        		</div>
+                            </form>
+            			</div>
+            			<div class="modal-footer">
+            				<button class="btn btn-primary" uniqueId="{$course['cid']}"  id="submitCourseInfoForm">提交</button>
+            				<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+            			</div>
+            		</div>
+            	</div>
+            </div>
+	    
+    </article>
+</div>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+$(function(){
+    $('.table-sort').dataTable({
+		"aaSorting": [[ 1, "asc" ]],//默认第几个排序
+		"bStateSave": true,//状态保存
+		"aoColumnDefs": [
+		  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+		  {"orderable":false,"aTargets":[0,2,3,4,5,6,7,8,9]}// 制定列不参与排序
+		]
+	});
+	$('.table-sort tbody').on( 'click', 'tr', function () {
+		if ( $(this).hasClass('selected') ) {
+			$(this).removeClass('selected');
+		}
+		else {
+			$('tr.selected').removeClass('selected');
+			$(this).addClass('selected');
+		}
+	}); 
+	
+    // 	显示课程编辑表单
+    $(document).on('click touchend','#editCourseBaseInfo',function(){
+        $('#modal-demo').modal('show')
+    })
+	
+    // 	提交课程编辑表单
+    $(document).on('click touchend','#submitCourseInfoForm',function(){
+        let cid = $(this).attr('uniqueId')
+        
+        let detail = $('#detail').val().trim()
+        let place = $('#place').val().trim()
+        
+        if(detail.length == 0 || place.length == 0){
+            layer_shake('请填写完整信息')
+            return false
+        }
+        
+        $.ajax({
+            url:url.submitCourseInfoForm+'?cid='+cid,
+            type:'post',
+            data:$('#form-course-set').serialize(),
+            dataType:'json',
+            success:res=>{
+                console.log(res);
+                if(res.status == 1){
+                    layer_success(res.info)
+                    setTimeout(()=>{location.reload()},800)
+                }else{
+                    layer_shake(res.info)
+                }
+            }
+        });  
+    })
+	
+});
+		
+</script>
+{/block}

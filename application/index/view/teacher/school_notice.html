@@ -1,0 +1,98 @@
+{extend name="public_teacher/default" /}
+
+{block name="title"}
+<title>选课系统-教师</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .title{
+        text-align: center;
+        color: {$config_color}; 
+        font-size: 25px;
+        font-weight: 600;
+    }
+    .Hui-article{
+        background: #F2F2F2;
+    }
+    .manage{
+        background: #fff;
+        box-shadow:0 0 10px rgba(0,0,0,0.16);
+    }
+    .dowebok{
+        text-align: center;
+        margin: 120px auto;
+    }
+    .dataTables_wrapper .dataTables_filter {
+        display: none;    
+    }
+    .flipTimer .digit > div.digit-top, .flipTimer .digit > div.shadow-top {
+        background-color: {$config_color};
+        border-bottom: 1px solid {$config_color};
+    }
+    .flipTimer .digit > div.digit-bottom, .flipTimer .digit > div.shadow-bottom {
+          background-color: {$config_color};
+    }
+    
+    /*弹出框*/
+    .modal{
+        top:10%;
+    }
+    .modal-dialog {
+        width: 550px !important;
+    }
+    
+     /*去除input[number] 默认样式*/
+    ::-webkit-inner-spin-button {
+       -webkit-appearance: none;
+    }
+    .input-text[type="number"] {
+        width: 100%;
+    }
+    
+    /*课程简介文本域*/
+    .course_detail{
+        width: 100%;
+        height: 80px;
+        resize: none;
+        font-size: 15px;
+        padding: 6px;
+        box-sizing: border-box;
+        border-radius: 3px;
+        max-height: 80px;
+    }
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">学校公告</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a></nav>
+	<div class="Hui-article">
+	<article class="cl pd-20 manage hui-bounceinB">
+	    <div style="padding:10px;padding-bottom:40px;">
+	        {$content | default='暂无公告'}
+	    </div>
+	     
+	     
+	    
+    </article>
+</div>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+$(function(){
+     
+	
+});
+		
+</script>
+{/block}

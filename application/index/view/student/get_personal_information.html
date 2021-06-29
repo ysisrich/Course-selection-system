@@ -1,0 +1,488 @@
+{extend name="public_student/default" /}
+
+{block name="title"}
+<title>选课系统-管理员</title>
+</head>
+<body>
+    
+    <style type="text/css" media="all">
+    
+        /*去除浏览器滚动条默认样式*/
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            color: transparent;
+         }
+        .Hui-article{
+            background: #F2F2F2;
+        }
+        .personalInformation{
+            width: 80%;
+            /*height: 300px;*/
+            padding: 20px;
+            background: #fff;
+            margin: 50px auto;
+            box-shadow:0 0 10px rgba(0,0,0,0.16);
+            /*display: flex;*/
+        }
+        .title{
+            display: inline-block;
+            width: 93%;
+            font-size: 14px;
+            font-weight: 700;
+        }
+        .baseInfo{
+            display: flex;
+        }
+        .ifmation_part1{
+            flex: 1;
+            /*background: red;*/
+            /*height: 300px;*/
+        }
+        .ifmation_part1 ul li{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            margin: 10px;
+        }
+        .baseInfoValue{
+            display: inline-block;
+            width: 35%;
+            height: 100%;
+            color: #888;
+        }
+        .ifmation_part2{
+            flex: 1;
+            border-left: 1px solid #e5e5e5;
+            padding-left: 20px;
+        }
+        .ifmation_part2 ul li{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            margin: 10px;
+        }
+        
+        /*--编辑信息表单--*/
+        .baseInfoForm{
+            display: none;
+            width: 80%;
+            /*height: 300px;*/
+            padding: 20px;
+            background: #fff;
+            margin: 50px auto;
+            box-shadow:0 0 10px rgba(0,0,0,0.16);
+        }
+        .icheckbox-blue, .iradio-blue{
+            margin: -1px 0;
+        }
+        .check-box, .radio-box {
+            padding-left: 0px;
+        }
+        input[type="radio"], input[type="checkbox"] {
+            line-height: normal;
+            margin-top: -2px;
+        }
+    
+        
+        /*号码验证*/
+        .phone_check{
+            margin: 0 5px;
+            color: blue;
+            cursor: pointer;
+        }
+        .not{
+            cursor: not-allowed;
+        }
+        .modal{
+            top:20%;
+        }
+        .modal-dialog {
+            width: 550px !important;
+        }
+        @media ( max-width : 500px) {
+        	.modal-dialog {width: 450px !important}
+        	.checked_label{flex:2!important}
+        }
+        .checked{
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+            margin: 5px auto;
+            /*background: red;*/
+            display: flex;
+        }
+        .checked .checked_label{
+            flex: 1;
+            color: rgba(0,0,0,.4);
+        }
+        .checked .checked_value{
+            flex: 5;
+        }
+        /*.input-text, .textarea{*/
+        /*    width: auto;*/
+        /*}*/
+        .input-text[type="number"] {
+            width: 150px;
+        }
+        
+        /*去除input[number] 默认样式*/
+        ::-webkit-inner-spin-button {
+           -webkit-appearance: none;
+        }
+        
+        /* onKeypress="return(/[\d\.]/.test(String.fromCharCode(event.keyCode)))" 
+         * 阻止number输入框  输入字母e
+         * 去除input检查 spellcheck="false"
+         */
+    </style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">个人信息</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a>
+		</nav>
+		
+	<div class="Hui-article">
+    	<article class="cl pd-20">
+    	    
+    			<div class="personalInformation hui-bounceinB">
+    			    <h3 class="title">基本信息</h3>
+    			    <input class="btn btn-primary radius" id="editBaseInfo" type="button" uniqueId="{$student['id']}" value="编辑">
+    			    <div class="baseInfo">
+                        <div class="ifmation_part1">
+                            <ul>
+                                <li><span class="baseInfoValue">真实姓名</span><span>{$student['name']}</span></li>
+                                <li><span class="baseInfoValue">登录账号</span><span>{$student['account']}</span></li>
+                                <li><span class="baseInfoValue">年级</span><span>{$student['year']}</span></li>
+                                <li><span class="baseInfoValue">学院</span><span>{$student['college']}</span></li>
+                                <li><span class="baseInfoValue">专业</span><span>{$student['major']}</span></li>
+                                <li><span class="baseInfoValue">班级</span><span>{$student['grade']}</span></li>
+                            </ul>
+                        </div>
+                        <div class="ifmation_part2">
+                            <ul>
+                                <li><span class="baseInfoValue">性别</span><span>{if condition="$student['sex'] eq 0"}女{else/}男{/if}</span></li>
+                                <li><span class="baseInfoValue">联系手机</span><span class="phone">{$student['phone'] | default="无"}</span><span class="phone_check hidden-xs">{if condition="$student['phone_check'] eq 0"}点击验证{else/}已验证{/if}</span></li>
+                                <li class="visible-xs"><span class="phone_check visible-xs">{if condition="$student['phone_check'] eq 0"}点击验证{else/}已验证{/if}</span></li>
+                                <li><span class="baseInfoValue">联系邮箱</span><span>{$student['email'] | default="无"}</span></li>
+                                <li><span class="baseInfoValue">禁用状态</span><span>{if condition="$student['status'] eq 0"}禁用{else/}启用{/if}</span></li>
+                            </ul>
+                        </div>
+                    </div>
+    			</div>
+    			
+    			<!--手机号码验证-->
+    			<div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                	<div class="modal-dialog">
+                		<div class="modal-content radius">
+                			<div class="modal-header">
+                				<h3 class="modal-title">身份验证</h3>
+                				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+                			</div>
+                			<div class="modal-body">
+                				<div class="Huialert Huialert-danger">为了您的账号安全，进行敏感操作前须先验证身份</div>
+                				<div class="checked">
+                				    <div class="checked_label">
+                				        验证方式
+                				    </div>
+                				    <div class="checked_value">
+                				        手机验证
+                				    </div>
+                				</div>
+                				<div class="checked">
+                				    <div class="checked_label">
+                				        安全手机
+                				    </div>
+                				    <div class="checked_value" id="checked_value">
+                				        {$student['phone']}
+                				    </div>
+                				</div>
+                				<div class="checked">
+                				    <div class="checked_label">
+                				        短信验证码
+                				    </div>
+                				    <div class="checked_value">
+                				        <input type="number" placeholder="4位数字验证码" class="input-text" id="codeInput">
+                				        <input class="btn btn-primary radius" type="button"  id="sendCode" tp="{$userInfo['type']}" phone="{$student['phone']}" value="发送验证码">
+                				    </div>
+                				</div>
+                				
+                			</div>
+                			<div class="modal-footer">
+                				<button class="btn btn-primary disabled" uniqueId="{$student['id']}" id="submitCode">确定</button>
+                				<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+                			</div>
+                		</div>
+                	</div>
+                </div>
+    			
+    			<!--编辑信息表单-->
+    			<div class="baseInfoForm">
+    			    <div class="Huialert Huialert-success" style="text-align: center;margin: 20px auto;line-height: 30px;"><i class="Hui-iconfont" >&#xe6a6;</i>提示 ： 1、姓名、性别、联系方式、邮箱为必填项。 2、年级、学院、专业、班级只能由管理员修改（转专业）！</div>
+        			<form  class="form form-horizontal" id="form-baseinfo-edit" >
+                		<div class="row cl">
+                			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>真实姓名：</label>
+                			<div class="formControls col-xs-8 col-sm-9">
+                				<input type="text" class="input-text" spellcheck="false" value="{$student['name']}" placeholder="请输入真实姓名" id="name"  name="name">
+                			</div>
+                		</div>
+                		<!--<div class="row cl">-->
+                		<!--	<label class="form-label col-xs-4 col-sm-3">登录账号：</label>-->
+                		<!--	<div class="formControls col-xs-8 col-sm-9">-->
+                		<!--		<input type="text" class="input-text not" value="{$student['account']}" disabled name="account">-->
+                		<!--	</div>-->
+                		<!--</div>-->
+                		<!--<div class="row cl">-->
+                		<!--	<label class="form-label col-xs-4 col-sm-3">禁用状态：</label>-->
+                		<!--	<div class="formControls col-xs-8 col-sm-9">-->
+                		<!--		<div class="switch" data-on-label="开启" data-off-label="禁用">-->
+                  <!--                   <input type="checkbox" class="not" name="status" {if condition="$student['status'] eq 1"} checked {/if} disabled/>-->
+                  <!--              </div>-->
+                		<!--	</div>-->
+                		<!--</div>-->
+                		
+                		<div class="row cl">
+        			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>年级：</label>
+        			<div class="formControls col-xs-8 col-sm-9">
+        				<span class="select-box">
+                          <select class="select"  size="1" name="year" disabled>
+                          {volist name="year" id="vo"}
+                                <option value="{$vo.id}" id="year_edit_{$vo.id}" {if condition='$vo.name eq $student["year"]'}selected{/if}>{$vo.name}</option>
+                            {/volist}
+                          </select>
+                        </span>
+        			</div>
+        		</div>
+        		<div class="row cl">
+        			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>学院：</label>
+        			<div class="formControls col-xs-8 col-sm-9">
+        				<span class="select-box">
+                          <select class="select"  size="1" name="college" disabled>
+                            {volist name="college" id="vo"}
+                                <option value="{$vo.id}" id="college_edit_{$vo.id}" {if condition='$vo.name eq $student["college"]'}selected{/if}>{$vo.name}</option>
+                            {/volist}
+                          </select>
+                        </span>
+        			</div>
+        		</div>
+        		<div class="row cl">
+        			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>专业：</label>
+        			<div class="formControls col-xs-8 col-sm-9">
+        				<span class="select-box">
+                          <select class="select"  size="1" name="major" disabled>
+                            {volist name="major" id="vo"}
+                                <option value="{$vo.id}" id="major_edit_{$vo.id}" {if condition='$vo.name eq $student["major"]'}selected{/if}>{$vo.name}</option>
+                            {/volist}
+                          </select>
+                        </span>
+        			</div>
+        		</div>
+        		<div class="row cl">
+        			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>班级：</label>
+        			<div class="formControls col-xs-8 col-sm-9">
+        				<span class="select-box">
+                          <select class="select"  size="1" name="grade" disabled>
+                            {volist name="grade" id="vo"}
+                                <option value="{$vo.id}" id="grade_edit_{$vo.id}" {if condition='$vo.name eq $student["grade"]'}selected{/if}>{$vo.name}</option>
+                            {/volist}
+                          </select>
+                        </span>
+        			</div>
+        		</div>
+                		<div class="row cl">
+                			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>性别：</label>
+                			<div class="formControls col-xs-8 col-sm-9  skin-minimal">
+                				<div class="radio-box">
+                					<input  type="radio" id="sex-1" value="1"  name="sex" {if condition="$student['sex'] eq 1"}checked{/if}>
+                					<label for="sex-1">男</label>
+                				</div>
+                				<div class="radio-box">
+                					<input type="radio" id="sex-2" value="0" name="sex" {if condition="$student['sex'] eq 0"}checked{/if}>
+                					<label for="sex-2">女</label>
+                				</div>
+                			</div>
+                		</div>
+                		<div class="row cl">
+                			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>联系方式：</label>
+                			<div class="formControls col-xs-8 col-sm-9">
+                				<input type="number" class="input-text" spellcheck="false" style="width:100%" value="{$student['phone']}" placeholder="请输入正确有效手机号" id="phone" name="phone" onKeypress="return(/[\d\.]/.test(String.fromCharCode(event.keyCode)))">
+                			</div>
+                		</div>
+                		<div class="row cl">
+                			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>联系邮箱：</label>
+                			<div class="formControls col-xs-8 col-sm-9">
+                				<input type="text" class="input-text" spellcheck="false" value="{$student['email']}" placeholder="请输入正确有效邮箱地址" name="email" id="email">
+                			</div>
+                		</div>
+                		<div class="row cl">
+                			<div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                				<input class="btn btn-primary radius" id="backBaseInfo" type="button" value="&nbsp;&nbsp;取消&nbsp;&nbsp;">
+                				<input class="btn btn-primary radius" id="submitBaseInfoFrom" type="button" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+                			</div>
+                		</div>
+                	</form>
+    			</div>
+        </article>
+    
+    </div>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+    
+$(function(){
+    
+// 	$('.skin-minimal input').iCheck({
+// 		checkboxClass: 'icheckbox-blue',
+// 		radioClass: 'iradio-blue',
+// 		increaseArea: '20%'
+// 	})
+	
+    // 编辑个人信息
+    $('#editBaseInfo').on('click touchend',function(){
+        $('.personalInformation').addClass('hui-bounceoutT').hide()
+        $('.baseInfoForm').removeClass('hui-bounceoutT').addClass('hui-bounceinB').show()
+    })
+    
+    // 取消编辑
+    $('#backBaseInfo').on('click touchend',function(){
+        location.reload()
+        // $('.baseInfoForm').addClass('hui-bounceoutT').hide()
+        // $('.personalInformation').removeClass('hui-bounceoutT').addClass('hui-bounceinB').show()
+    })
+    
+    // 提交编辑基本信息表单
+    $('#submitBaseInfoFrom').on('click touchend',function(){
+        let id = $('#editBaseInfo').attr('uniqueId')
+        let name = $('#name').val().trim()
+        let phone = $('#phone').val().trim()
+        let email = $('#email').val().trim()
+        
+        let phone_reg = /^1[3|4|5|7|8]\d{9}$/
+        let email_reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
+        
+        if(name.length==0 || phone.length ==0 || email.length == 0){
+            layer_shake('请检查表单信息是否填写完整')
+            return false
+        }
+        if(!phone_reg.test(phone)){
+			layer_shake('请输入正确有效手机号');
+			return false;
+		}
+		if(!email_reg.test(email)){
+			layer_shake('请输入正确有效邮箱地址');
+			return false;
+		}
+        
+        
+        $.ajax({
+            url:url.updateBaseInfo+'?id='+id,
+            type:'post',
+            data:$('#form-baseinfo-edit').serialize(),
+            dataType:'json',
+            success:res=>{
+                console.log(res)
+                if(res.status == 1){
+                    layer_success(res.info)
+                    setTimeout(function() {location.reload()}, 800);
+                }else{
+                    layer_noChange(res.info)
+                }
+            }
+        });
+    })
+    
+    // 显示手机号验证弹窗
+    $('.phone_check').on('click touchend',function(){
+        let phone = $(this).parent().find('.phone').text()
+        $('#sendCode').attr('phone',phone)
+        $("#modal-demo").modal("show")
+    })
+    
+    // 验证码输入框
+    $('#codeInput').change(function(){
+        if($(this).val().trim().length == 4){
+            $('#submitCode').removeClass('disabled')
+        }else{
+            $('#submitCode').addClass('disabled')
+        }
+    })
+    
+    // 60秒内禁止点击发送验证码
+	let wait=60;
+	function time(o) {
+		if (wait == 0) {
+			o.removeAttr("disabled");
+			o.removeClass('not')
+			o.val("发送验证码");
+			wait = 60;
+		} else {
+			o.attr("disabled", true);
+			o.addClass('not')
+			o.val("重新获取(" + wait + ")");
+			wait--;
+			setTimeout(function () {
+				time(o)
+			}, 1000)
+		}
+	}
+
+    // 获取验证码
+    $('#sendCode').on('click touchend',function(){
+        if(!$(this).attr('phone')){
+            layer_shake('请先补全手机号码信息')
+            return false
+        }
+        let type = $(this).attr('tp')
+        $.ajax({
+			url:"{:url('Index/sendForgetCode')}",
+			data:{phone:$(this).attr('phone'),type},
+			type:"post",
+			dataType:"json",
+			success:function(res){
+				if(res.status==1){
+					layer_success(res.info);
+					time($('#sendCode'));
+				}else{
+					layer_danger(res.info);
+				}
+			}
+		});
+    })
+    
+    // 提交验证码
+    $('#submitCode').on('click touchend',function(){
+        let code = $('#codeInput').val()
+        let id = $(this).attr('uniqueId')
+        let type =0
+        $.ajax({
+			url:"{:url('Index/checkCode')}",
+			data:{code,id,type},
+			type:"post",
+			dataType:"json",
+			success:function(res){
+				if(res.status==1){
+					layer_success(res.info);
+					setTimeout(function(){ location.reload() },800)
+				}else{
+					layer_danger(res.info);
+				}
+			}
+		});
+        
+    })
+    
+    
+});
+
+    
+		
+</script>
+{/block}

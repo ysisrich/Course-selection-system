@@ -1,0 +1,194 @@
+
+<script type="text/javascript" charset="utf-8">
+    
+    // 路由信息 
+    let url = {
+        // 个人中心
+        getPersonalInformation:"{:url('Index/getPersonalInformation')}",
+        logout:"{:url('Index/logout')}",
+        changeSkin:"{:url('Index/changeSkin')}",
+        updateBaseInfo:"{:url('Index/updateBaseInfo')}",
+        modifyPassword:"{:url('Index/modifyPassword')}",
+        updatePassword:"{:url('Index/updatePassword')}",
+        
+        // 用户管理 - 账号管理
+        getAccountData:"{:url('Index/getAccountData')}",
+        selectCondition:"{:url('Index/selectCondition')}",
+        
+        // 用户管理 - 超级用户管理路由
+        superUserManagerAdd:"{:url('Index/superUserManagerAdd')}",
+        superUserManagerDelete:"{:url('Index/superUserManagerDelete')}",
+        getManagerOne:"{:url('Index/getManagerOne')}",
+        superUserManagerEdit:"{:url('Index/superUserManagerEdit')}",
+        superUserManagerStatusEdit:"{:url('Index/superUserManagerStatusEdit')}",
+        modifyManagerPw:"{:url('Index/modifyManagerPw')}",
+        getSearchData:"{:url('Index/getSearchData')}",
+        deleteMuch:"{:url('Index/deleteMuch')}",
+        getAccountList:"{:url('Index/getAccountList')}",
+        
+        // 验证管理员密码
+        checkManagerPW:"{:url('Index/checkManagerPW')}",
+        
+        
+        // 用户管理 - 学生管理路由
+        UserStudentAdd:"{:url('Index/UserStudentAdd')}",
+        UserStudentDelete:"{:url('Index/UserStudentDelete')}",
+        modifyStudentPw:"{:url('Index/modifyStudentPw')}",
+        getStudentOne:"{:url('Index/getStudentOne')}",
+        getCYMG:"{:url('Index/getCYMG')}",
+        UserStudentStatusEdit:"{:url('Index/UserStudentStatusEdit')}",
+        UserStudentEdit:"{:url('Index/UserStudentEdit')}",
+        getSearchStudentData:"{:url('Index/getSearchStudentData')}",
+        deleteMuchStudent:"{:url('Index/deleteMuchStudent')}",
+        exportStudent:"{:url('Index/exportStudent')}", // 一键导出学生
+        getStudentList:"{:url('Index/getStudentList')}",
+        
+        // 用户管理 - 教师管理路由
+        UserTeacherAdd:"{:url('Index/UserTeacherAdd')}",
+        UserTeacherDelete:"{:url('Index/UserTeacherDelete')}",
+        modifyTeacherPw:"{:url('Index/modifyTeacherPw')}",
+        getTeacherOne:"{:url('Index/getTeacherOne')}",
+        UserTeacherStatusEdit:"{:url('Index/UserTeacherStatusEdit')}",
+        UserTeacherEdit:"{:url('Index/UserTeacherEdit')}",
+        getSearchTeacherData:"{:url('Index/getSearchTeacherData')}",
+        deleteMuchTeacher:"{:url('Index/deleteMuchTeacher')}",
+        exportTeacher:"{:url('Index/exportTeacher')}", // 一键导出教师
+        getTeacherList:"{:url('Index/getTeacherList')}",
+        
+        // 课程管理
+        addCourse:"{:url('Index/addCourse')}", //添加课程
+        getCourseOne:"{:url('Index/getCourseOne')}", //根据id获取对应课程信息
+        editCourse:"{:url('Index/editCourse')}", //根据id编辑对应课程信息
+        editCourseStatus:"{:url('Index/editCourseStatus')}", //编辑课程状态
+        searchCourseName:"{:url('Index/searchCourseName')}", // 根据课程名称搜课程
+        deleteCourse:"{:url('Index/deleteCourse')}", // 根据id删除课程
+        deleteCourseMuch:"{:url('Index/deleteCourseMuch')}", // 批量删除课程
+        exportCourse:"{:url('Index/exportCourse')}", // 一键导出课程
+        getCourseList:"{:url('Index/getCourseList')}",
+        
+        // 发布管理
+        accordConditionSearchCourse:"{:url('Index/accordConditionSearchCourse')}", // 筛选课程
+        searchCourse:"{:url('Index/searchCourse')}", // 搜索课程
+        setClassTime:"{:url('Index/setClassTime')}", // 设置开放选课时间段
+        
+        searchMajor:"{:url('Index/searchMajor')}", // 搜专业
+        searchMajor:"{:url('Index/searchCollege')}", // 搜院系
+        
+        
+        // 权限管理
+        addRole:"{:url('Index/addRole')}", 
+        deleteRole:"{:url('Index/deleteRole')}", 
+        getRoleOne:"{:url('Index/getRoleOne')}", 
+        editRole:"{:url('Index/editRole')}", 
+        
+        // 评价管理
+        coursepj:"{:url('Index/coursePj')}", 
+        teacherpj:"{:url('Index/teacherPj')}", 
+        
+        // 邮件管理
+        sendMail:"{:url('Index/sendMail')}", //发布邮件
+        sendMail1:"{:url('Index/sendMail1')}", // 发布邮件 以个人邮箱发送
+        upload:"{:url('Index/upload')}", // 上传附件
+        
+        // 数据统计
+        
+        
+        // 系统日志
+        saveNotice:"{:url('Index/saveNotice')}", // 保存公告
+        getNotice:"{:url('Index/getNotice')}", // 获取公告
+        clearNotice:"{:url('Index/clearNotice')}", // 清空公告
+        deleteMuchLog:"{:url('Index/deleteMuchLog')}",
+        clearLog:"{:url('Index/clearLog')}",
+        exportLog:"{:url('Index/exportLog')}", // 一键导出日志
+    }
+    
+    
+    NProgress.configure({
+        easing: 'ease',  // 动画方式    
+        // speed: 500,  // 递增进度条的速度    
+        showSpinner: true, // 是否显示加载ico    
+        // trickleSpeed: 200, // 自动递增间隔    
+        // minimum: 0.3 // 初始化时的最小百分比
+    });
+    // 在ajax请求开始  进度条显示
+    $(document).ajaxStart(function(){
+    // $(window).ajaxStart(function(){
+        NProgress.start();
+    });
+    // ajax请求结束  进度条结束
+    $(document).ajaxStop(function(){
+        NProgress.done();
+    });
+    
+    
+    // 当用户超过15分钟未在该系统操作时，自动退出
+    logout();
+    function logout(){
+        setTimeout(function(){
+            $.ajax({
+				url:url.logout,
+				type:"post",
+				dataType:'json',
+				success:res=>{
+					if(res.status == 1){
+				// 		location.href = "{:url('Index/login/index')}"
+					}
+				}
+			})
+        },15*60*1000)
+    }
+
+	// 安全退出
+	$('.logout').on('click touchend',function(){
+		layer.confirm('确认退出?',{icon:2},function(){
+			$.ajax({
+				url:url.logout,
+				type:"post",
+				dataType:'json',
+				success:res=>{
+					if(res.status == 1){
+						location.href = "{:url('Index/login/index')}"
+					}
+				}
+			})
+		});
+	})
+	
+	// 改变皮肤
+		$('.colors').on('click','li',function(){
+			// console.log($(this).index())
+			let index = $(this).index()
+			$.ajax({
+				url:url.changeSkin,
+				data:{
+					index
+				},
+				type:"post",
+				dataType:"json",
+				success:res=>{
+					if(res.status == 1){
+					    setTimeout(function() {location.reload()}, 800);
+						layer_success('换肤成功')
+					}else{
+						layer_danger('换肤失败')
+					}
+				}
+			});
+		})
+        
+        // 伸缩展开侧边栏
+        $(document).on('click touchend','.switch-icon',function(){
+            if($(this).hasClass("open")){
+        		$(this).removeClass("open");
+        		$("body").removeClass("big-page");
+        		$('.switch').html('&#xe678;');
+        		$('#switch').css({'left':'auto','color':'#FFF'})
+        	} else {
+        		$(this).addClass("open");
+        		$("body").addClass("big-page");
+        		$('.switch').html('&#xe67a;');
+        		$('#switch').css({'left':0,'color':'blue'})
+        	}
+            
+        })
+</script>

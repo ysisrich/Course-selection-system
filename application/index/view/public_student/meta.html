@@ -1,0 +1,133 @@
+
+
+{load href="__PUBLIC__/plugins/h-ui-admin/static/h-ui/css/H-ui.min.css" /}
+{load href="__PUBLIC__/plugins/h-ui-admin/static/h-ui.admin/css/H-ui.admin.css" /}
+{load href="__PUBLIC__/plugins/h-ui-admin/lib/Hui-iconfont/1.0.8/iconfont.css" /}
+{load href="__PUBLIC__/plugins/h-ui-admin/static/h-ui.admin/skin/default/skin.css" id="skin" /}
+{load href="__PUBLIC__/plugins/h-ui-admin/static/h-ui.admin/css/style.css" /}
+
+{load href="__PUBLIC__/css/animate.min.css" /}
+{load href="__PUBLIC__/plugins/nprogress/nprogress.css" /}
+
+<!--pc时钟-->
+{load href="__PUBLIC__/css/fliptimer.css" /}
+<!--移动端时钟-->
+
+<style type="text/css">
+    /*进度条样式*/
+    #nprogress .bar{
+     height: 3px !important;
+    }
+    
+    /*去除浏览器滚动条默认样式*/
+    ::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+        color: transparent;
+     }
+     
+     /*选中后的菜单*/
+     .selected_menu{
+        background: #fff;
+        color:{$config_color} !important;
+     }
+         
+	.config_color,.Hui-aside{
+		background-color: {$config_color};
+		color:#fff !important;
+	}
+	.config_hover:hover{
+		/* color: {$config_color} !important; */
+		background-color: rgba(0,0,0,0.31);
+	}
+	.selected_menus{
+	    background-color: rgba(0,0,0,0.31);
+	}
+	.container-fluid{
+		height: 50px;
+	}
+	.navbar .logo{
+		height: 50px;
+		line-height: 50px;
+		font-size: 25px;
+		font-weight: 900;
+		margin-left: 10px;
+	}
+	.navbar-nav>ul>li, .navbar-nav>ul>li>a {
+	    line-height: 50px;
+	    font-size: 14px;
+	}
+	.Hui-article-box,.Hui-aside{
+		top:50px;
+	}
+	.menu .z:hover{
+		color: {$config_color} !important;
+	}
+	
+	/* 侧边 */
+	.Hui-aside .menu_dropdown dt {
+	    line-height: 45px;
+		border-bottom: 0;
+	}
+	.Hui-aside .menu_dropdown dt .menu_dropdown-arrow {
+	    color: #fff;
+	}
+	.Hui-aside .menu_dropdown dt .Hui-iconfont {
+	    color: #fff;
+	}
+	.Hui-aside .menu_dropdown li a {
+	    color: #fff;
+	}
+	.Hui-aside .menu_dropdown li a:hover{
+	    color: {$config_color};
+	    /*background:rgba(0,0,0,0.31);*/
+	}
+	.switch-icon{
+        margin-right: 8px;
+        margin-left: -15px;
+        cursor: pointer;
+    }
+	
+	/*展开*/
+	/*.dislpayArrow {*/
+ /*       position: absolute;*/
+ /*       top: 0;*/
+ /*       bottom: 0;*/
+ /*       left: 170px;*/
+ /*       width: 0px;*/
+ /*       height: 100%;*/
+ /*       z-index: 999;*/
+	/*}*/
+	/*.dislpayArrow a {*/
+ /*       position: absolute;*/
+ /*       display: block;*/
+ /*       width: 30px;*/
+ /*       height: 30px;*/
+ /*       top: 98%;*/
+ /*       right: -20px;*/
+        /*bottom: 50px;*/
+ /*       outline: none;*/
+ /*       background: none;*/
+        /*color: #eee;*/
+ /*   }*/
+ /*   .dislpayArrow a .switch{*/
+ /*       font-size: 20px;*/
+ /*       height: 100%;*/
+ /*       line-height: 30px;*/
+ /*       color: rgba(0,0,255,0.6);*/
+ /*   }*/
+ /*   .has-switch {*/
+ /*       display: inline-block;*/
+ /*       cursor: pointer;*/
+ /*       border: 0; */
+ /*       user-select: none;*/
+ /*       min-width: auto; */
+ /*   }*/
+	
+	
+	/*小屏的菜单按钮*/
+	.nav-toggle, a.nav-toggle{
+	    top: 3px;
+	    background: rgba(0,0,0,0.15);
+	}
+</style>

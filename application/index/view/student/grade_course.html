@@ -1,0 +1,138 @@
+{extend name="public_student/default" /}
+
+{block name="title"}
+<title>选课系统-学生</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .title{
+        text-align: center;
+        color: {$config_color}; 
+        font-size: 25px;
+        font-weight: 600;
+    }
+    .label, .badge {
+        padding: 4px 10px;
+        letter-spacing: 4px;
+    }
+    .Hui-article{
+        background: #F2F2F2;
+    }
+    .manage{
+        background: #fff;
+        box-shadow:0 0 10px rgba(0,0,0,0.16);
+    }
+    .dowebok{
+        text-align: center;
+        margin: 120px auto;
+    }
+    .dataTables_wrapper .dataTables_filter {
+        display: none;    
+    }
+    .flipTimer .digit > div.digit-top, .flipTimer .digit > div.shadow-top {
+        background-color: {$config_color};
+        border-bottom: 1px solid {$config_color};
+    }
+    .flipTimer .digit > div.digit-bottom, .flipTimer .digit > div.shadow-bottom {
+          background-color: {$config_color};
+    }
+    
+    /*未开放选课*/
+    .nocourse{
+        width: 100%;
+        height: 100%;
+    }
+    .nocourse img{
+        width: 100%;
+        height: 100%;
+    }
+    .Huialert {
+        height: 33px;
+        line-height: 34px;
+    }
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">成绩查询</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a>
+	</nav>
+	
+	<div class="Hui-article">
+	<article class="cl pd-20 manage hui-bounceinB">
+	    
+		
+			<!--课程成绩信息表格-->
+			{if condition="$student['course_score'] neq null"}
+			<div class="Huialert {if condition="$student['course_score'] lt 60"}Huialert-danger{else/}Huialert-success{/if}"><i class="Hui-iconfont"></i>温馨提示：{if condition="$student['course_score'] lt 60"}未及格，请继续加油！{else/}恭喜你，及格了！{/if}</div>
+			{else/}
+			<div class="Huialert Huialert-success"><i class="Hui-iconfont"></i>温馨提示：成绩还未出来</div>
+			{/if}
+			<div class="mt-20">
+				<table class="table table-border table-bordered table-hover table-bg table-sort">
+					<thead>
+						<tr class="text-c">
+							<th width="25"><input type="checkbox" disabled name="" value=""></th>
+							<th width="">ID</th>
+							<th width="">课程名称</th>
+							<th width="">课程学分</th>
+							<th width="">课程分数</th>
+						</tr>
+					</thead>
+					<tbody>
+					    
+    						<tr class="text-c">
+    							<td><input type="checkbox" class="checked_delete" name=""></td>
+    							<td>{$student['selected_course']}</td>
+    							<td>{$student['course_name']}</td>
+    							<td>{$student['score']}</td>
+    							<td>{$student['course_score'] }</td>
+    							
+    						</tr>
+						
+					</tbody>
+				</table>
+			</div>
+			
+    </article>
+
+</div>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+$(function(){
+// 	$('.table-sort').dataTable({
+// 		"aaSorting": [[ 1, "asc" ]],//默认第几个排序
+// 		"bStateSave": true,//状态保存
+// 		"aoColumnDefs": [
+// 		  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+// 		  {"orderable":false,"aTargets":[0,2,3,4,5,6,7,8,9]}// 制定列不参与排序
+// 		]
+// 	});
+// 	$('.table-sort tbody').on( 'click', 'tr', function () {
+// 		if ( $(this).hasClass('selected') ) {
+// 			$(this).removeClass('selected');
+// 		}
+// 		else {
+// 			$('tr.selected').removeClass('selected');
+// 			$(this).addClass('selected');
+// 		}
+// 	});
+	
+	
+    
+	
+});
+		
+</script>
+{/block}

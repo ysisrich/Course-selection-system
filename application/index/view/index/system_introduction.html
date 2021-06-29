@@ -1,0 +1,101 @@
+{extend name="public/default" /}
+
+{block name="title"}
+<title>选课系统-管理员</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .title{
+        text-align: center;
+        color: {$config_color}; 
+        font-size: 25px;
+        font-weight: 600;
+    }
+    .dowebok{
+        text-align: center;
+        margin: 120px auto;
+    }
+    .flipTimer .digit > div.digit-top, .flipTimer .digit > div.shadow-top {
+        background-color: {$config_color};
+        border-bottom: 1px solid {$config_color};
+    }
+    .flipTimer .digit > div.digit-bottom, .flipTimer .digit > div.shadow-bottom {
+          background-color: {$config_color};
+    }
+    
+    .text{
+        text-indent: 2em;
+    }
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">系统管理</span>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">系统概述</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a></nav>
+	<div class="Hui-article" style="display:{$isPower?'':'none'}">
+	<article class="cl pd-20 manage hui-bounceinB">
+		<h3 class="f-20 text-success title">欢迎使用校园选课系统</h3>
+        
+            <h4>1.系统概念：</h4>  
+            <p class="text">该系统是一个基于<a style="color:blue" href="https://www.kancloud.cn/manual/thinkphp5/118003" target="_blank"> tp5(thinkphp5.0) </a>框架的校园选课系统，tp是一个免费开源的，快速、简单的面向对象的轻量级PHP开发框架，是为了敏捷WEB应用开发和简化企业应用开发而诞生的，
+            对于新手也及其友好，具有完整的说明文档以及易懂的api，因此这也是我使用tp框架开发校园选课系统的原因之一。该系统主要面向的对象有三大用户，包括学生、教师以及管理员，因此开发模块就分为了三大部分：第一，管理员需要对另外两大模块进行数据统计管理，所以必须先对管理员的界面设计，以及相应
+            功能进行实现；第二，对学生界面设计实现，以及相应功能；第三，完成教师的界面以及功能。整体项目主要高度对数据的一个整合处理，所以就我个人理解而言，该系统纯粹就是一个可视化、可操作并且界面更加美观的一个数据库的翻版。开发步骤：构建思路，一步一步实现功能，同时建立对应数据表，前后端
+            不完全分离的开发设计，这样开发节约大量时间并实时看到相应效果。
+            </p>
+            
+            <h4>2.包含的技术栈：</h4>
+            <p class="text">主要tp5框架、h-ui、layui、mysql(加redis)、CDN(内容分发网络腾讯首体验)、bootstrap、前端三件套(html、css、js)、jquery、ajax、animate.css动画、echarts图表、Nprogress进度条、图标(阿里巴巴图标、ui自带图标、bootcss图标)、阿里云SDK短信验证(腾讯云短信服务首体验)、服务器压力测试工具Apache ab命令、以及对应插件的引入。</p>
+            
+            <h4>3.系统进度：</h4>
+            <p class="text">3月20日:从gitee下载tp5框架，新建项目，创建站点，部署项目；21日-25日：完成登录以及忘记密码功能，建立对应用户数据库；26日-31日：完成用户管理模块下的账号、超级用户、学生、教师管理，实现各个用户数据的增删改查以及手机验证、禁用启用、密码重置、筛选和搜索功能；
+            4月1日-2日：完成系统管理模块，实现了一个系统日志功能，可以监控系统的各种数据操作；3日-4日：完成权限管理和系统数据统计模块，实现给管理员添加角色名称，并使对应角色设置对应权限；5日：完成课程管理模块，实现课程与教师的一一对应。大致完成管理员端的功能。
+            8日-9日：开发学生端功能，完成可选课程的列表浏览；11日：完成学生评价功能；完成老师端功能，实现学生浏览，课程查看编辑；大致完成该系统原本所需功能！
+            完善：增加一键导出学生、教师、课程、日志信息功能。5月 ：增加课程公告功能，教师端可查看公告；添加用户及课程时，输入对应信息可提示数据库是否存在相关信息，避免重复；增加邮件发送功能；
+            </p>      
+            
+            <h4>4.系统功能详细描述：</h4>
+                <ul class="text">
+                    <li>1.账号登录</li>
+                    <li>2.忘记密码</li>
+                    <li>3.用户管理</li>
+                    <li>4.课程管理</li>
+                    <li>5.权限管理</li>
+                    <li>6.数据统计</li>
+                    <li>7.系统管理</li>
+                    <li>8.回收站</li>
+                </ul>
+            
+            <h4>5.服务器搭建：</h4>
+            <p class="text">宝塔软件是一个对服务器监控、负载情况查看、网站管理很方便的工具，尤其对服务器环境配置，网站所需容器、集数据库于一体非常完美，大大减少了单独配置环境所带来的错误，以及对于资源的上传下载简化了操作。
+            <a href="http://yangsong.cool" style="color:blue" target="_blank"> yangsong.cool (或者xk.yangsong.cool)</a>是我线上开发的一个测试版本。设计灵感小部分来源于其它网站的设计，比如：换肤最初是受到校园新教务系统的导航条颜色设置，短信验证来源于各大需注册
+            网站短信验证登录的设计，个人信息资料框是来源于腾讯云的个人域名管理模块界面，系统日志是受到宝塔面板日志浏览的启发。
+            </p>
+    </article>
+</div>
+
+<!--无权查看显示-->
+	<div class="nopower" style="display:{$isPower?'none':''}">
+	    <img  src="__PUBLIC__/img/noPower.jpg" alt="" />
+	</div>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+$(function(){
+
+
+});
+		
+</script>
+{/block}

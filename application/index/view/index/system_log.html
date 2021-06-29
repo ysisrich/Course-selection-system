@@ -1,0 +1,186 @@
+{extend name="public/default" /}
+
+{block name="title"}
+<title>选课系统-管理员</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .dataTables_wrapper .dataTables_filter {
+        display: none;    
+    }
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">系统管理</span>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">系统日志</span>
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a></nav>
+	<div class="Hui-article" style="display:{$isPower?'':'none'}">
+	    
+    	<article class="cl pd-20 manage hui-bounceinB" id="showTeachers">
+    			<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+    			    <span class="l">
+    			        <a href="javascript:;" class="btn btn-danger radius"  id="deleteMuch" ><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>
+    			        <a href="javascript:;" class="btn btn-primary radius" id="clear"><i class="Hui-iconfont">&#xe60b;</i> 清空</a>
+    			        <a href="javascript:;" class="btn btn-secondary radius" id="export"><i class="Hui-iconfont">&#xe640;</i> 一键导出</a>
+    			    </span> 
+    			    <span class="r">共有日志数据：<strong>{$count}</strong> 条</span> 
+    			</div>
+    			
+    			<!--日志信息表格-->
+    			<div class="mt-20">
+    				<table class="table table-border table-bordered table-hover table-bg table-sort" style="display:none;">
+    					<thead>
+    						<tr class="text-c">
+    							<th width="25"><input type="checkbox" disabled name="" value=""></th>
+    							<th width="">ID</th>
+    							<th width="">用户</th>
+    							<th width="">登录ip</th>
+    							<th width="">操作类型</th>
+    							<th width="">事件详情</th>
+    							<th width="">操作时间</th>
+    						</tr>
+    					</thead>
+    					<tbody>
+					   
+                         <!--1 登录 2 手机验证 3 添加 4 编辑 5 删除 6 启用禁用 7 密码重置 8 搜索-->
+					    {volist name="logs" id="vo"}
+    						<tr class="text-c">
+    							<td><input type="checkbox" class="checked_delete" uniqueId="{$vo.id}" name=""></td>
+    							<td>{$vo.id}</td>
+    							<td>{$vo.account}</td>
+    							<td>{$vo.ip}</td>
+    							<td>
+    							    {switch name="vo.type" }
+                                        {case value="1"}登录{/case}
+                                        {case value="2"}手机验证{/case}
+                                        {case value="3"}添加{/case}
+                                        {case value="4"}编辑{/case}
+                                        {case value="5"}删除{/case}
+                                        {case value="6"}启用禁用{/case}
+                                        {case value="7"}密码重置{/case}
+                                        {case value="8"}搜索{/case}
+                                        {case value="9"}查询{/case}
+                                        {default /}操作失误
+                                    {/switch}
+    							</td>
+    							<td>{$vo.detail_thing}</td>
+    							<td>{$vo.create_time}</td>
+    						</tr>
+						{/volist}
+						
+					</tbody>
+				</table>
+			</div>
+		</article>
+		
+		
+</div>
+
+<!--无权查看显示-->
+	<div class="nopower" style="display:{$isPower?'none':''}">
+	    <img  src="__PUBLIC__/img/noPower.jpg" alt="" />
+	</div>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+$(function(){
+	$('.table-sort').dataTable({
+		"aaSorting": [[ 1, "asc" ]],//默认第几个排序
+		"bStateSave": true,//状态保存
+		"aoColumnDefs": [
+		  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+		  {"orderable":false,"aTargets":[0,2,3,4,5]}// 制定列不参与排序
+		]
+	});
+	
+	setTimeout(()=>{
+	    $('.table').show()
+	},1)
+	
+	$('.table-sort tbody').on( 'click', 'tr', function () {
+		if ( $(this).hasClass('selected') ) {
+			$(this).removeClass('selected');
+		}
+		else {
+			$('tr.selected').removeClass('selected');
+			$(this).addClass('selected');
+		}
+	});
+	
+	// 获取选中的用户id
+    $('tbody').on('change','.checked_delete',function(){
+        let id = [];
+        $.each($('input:checkbox:checked'),function(){
+            id.push($(this).attr('uniqueId'))
+        })
+        $('#deleteMuch').attr('uniqueIds',id)
+    })
+    
+	// 批量删除
+    $('#deleteMuch').on('click touchend',function(){
+        if(!$(this).attr('uniqueIds')){
+            layer_noChange('请先选择数据')
+            return false
+        }
+            
+        let id = $(this).attr('uniqueIds')
+        layer.confirm('确认要批量删除吗？',function(index){
+            $.ajax({
+    			url:"{:url('Index/deleteMuchLog')}",
+    			data:{id},
+    			type:"post",
+    			dataType:"json",
+    			success:function(res){
+    				if(res.status==1){
+    					layer_success(res.info);
+    					setTimeout(function(){ location.reload() },800)
+    				}else{
+    					layer_danger(res.info);
+    				}
+    			}
+    		});
+        });
+    })
+    
+    
+    // 清空
+    $('#clear').on('click touchend',function(){
+            
+        layer.confirm('确认要清空吗？',function(index){
+            $.ajax({
+    			url:"{:url('Index/clearLog')}",
+    			type:"post",
+    			dataType:"json",
+    			success:function(res){
+    				if(res.status==1){
+    					layer_success(res.info);
+    					setTimeout(function(){ location.reload() },800)
+    				}else{
+    					layer_noChange(res.info);
+    				}
+    			}
+    		});
+        });
+    })
+    
+    // 一键导出系统日志信息表格
+    $('#export').on('click touchend',function(){
+        location.href = url.exportLog;
+    })
+	
+});
+		
+</script>
+{/block}

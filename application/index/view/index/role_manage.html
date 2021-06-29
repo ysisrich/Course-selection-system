@@ -1,0 +1,412 @@
+{extend name="public/default" /}
+
+{block name="title"}
+<title>选课系统-管理员</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .title{
+        text-align: center;
+        color: {$config_color}; 
+        font-size: 25px;
+        font-weight: 600;
+    }
+    .dowebok{
+        text-align: center;
+        margin: 120px auto;
+    }
+    .flipTimer .digit > div.digit-top, .flipTimer .digit > div.shadow-top {
+        background-color: {$config_color};
+        border-bottom: 1px solid {$config_color};
+    }
+    .flipTimer .digit > div.digit-bottom, .flipTimer .digit > div.shadow-bottom {
+          background-color: {$config_color};
+    }
+    /*隐藏datatable自带的搜索框*/
+    .dataTables_wrapper .dataTables_filter {
+        display: none;    
+    }
+    
+    /*弹出框*/
+    .modal{
+        top:20%;
+    }
+    .modal-dialog {
+        width: 550px !important;
+    }
+    
+    .search{
+        width: 250px;
+        /*min-width: 100px;*/
+    }
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">权限管理</span>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">角色管理</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a></nav>
+	<div class="Hui-article" style="display:{$isPower?'':'none'}">
+	<article class="cl pd-20 manage hui-bounceinB" id="showManagers">
+		 
+		<div class="Huialert Huialert-danger"><i class="Hui-iconfont">&#xe6a6;</i>暂定只有以下角色，后续完善！</div>
+		
+		<div class="cl pd-5 bg-1 bk-gray mt-20"> 
+		    <span class="l">
+		        <!--<a href="javascript:;" class="btn btn-danger radius" id="deleteMuch" ><i class="Hui-iconfont">&#xe6e2;</i> 批量删除</a>-->
+		        <a href="javascript:;" class="btn btn-primary radius" id="addRole"><i class="Hui-iconfont">&#xe600;</i> 添加角色</a>
+		    </span> 
+		    <!--<span class="r hidden-xs">-->
+      <!--          <input type="text" class="input-text search" placeholder="角色"  name="">-->
+			   <!-- <button type="submit" class="btn btn-success radius searchRole" ><i class="Hui-iconfont">&#xe665;</i> 搜角色</button>			        -->
+		    <!--</span>-->
+		    <!--<span class="r">共有数据：<strong>88</strong> 条</span> -->
+		</div>
+		<!--<div class="cl pd-5 bg-1 bk-gray mt-20 visible-xs"> -->
+		<!--    <span class="l">-->
+  <!--              <input type="text" class="input-text search" style="width:200px" placeholder="角色"  name="">-->
+		<!--	    <button type="submit" class="btn btn-success radius searchRole"  name=""><i class="Hui-iconfont">&#xe665;</i> 搜角色</button>			        -->
+		<!--    </span>-->
+		<!--</div>-->
+		
+		<!--角色信息表格-->
+		<div class="mt-20">
+			<table class="table table-border table-bordered table-hover table-bg table-sort">
+				<thead>
+					<tr class="text-c">
+						<th width="25"><input type="checkbox" disabled name="" value=""></th>
+						<th width="">ID</th>
+						<th width="">角色</th>
+						<th width="">权限</th>
+						<th width="">操作</th>
+					</tr>
+				</thead>
+				<tbody>
+				    
+				    {volist name="roles" id="vo"}
+						<tr class="text-c">
+							<td><input type="checkbox" class="checked_delete" uniqueId="{$vo.rid}" name=""></td>
+							<td>{$vo.rid}</td>
+							<td>
+							    {$vo.role_name}
+							</td>
+							<td>
+							    {in name='0' value='$vo.power' }<span class="label label-primary radius" style="margin:0 2px;">查询</span>{/in}
+							    {in name='1' value='$vo.power' }<span class="label label-success radius" style="margin:0 2px;">搜索</span>{/in}
+							    {in name='2' value='$vo.power' }<span class="label label-secondary radius" style="margin:0 2px;">添加</span>{/in}
+							    {in name='3' value='$vo.power' }<span class="label label-warning  radius" style="margin:0 2px;">修改</span>{/in}
+							    {in name='4' value='$vo.power' }<span class="label label-danger  radius" style="margin:0 2px;">删除</span>{/in}
+							    {in name='5' value='$vo.power' }<span class="label label-danger radius" style="margin:0 2px;">清空</span>{/in}
+							</td>
+							<td class="td-manage"> 
+    							<a title="编辑" href="javascript:;" id="editRole" uniqueId="{$vo.rid}" class="ml-5" style="text-decoration:none;font-size:20px;"><i class="Hui-iconfont">&#xe6df;</i></a>
+    							<a title="删除" href="javascript:;" id="deleteRole" uniqueId="{$vo.rid}" class="ml-5" style="text-decoration:none;font-size:20px;"><i class="Hui-iconfont">&#xe6e2;</i></a>
+    						</td>
+						</tr>
+					{/volist}
+					
+				</tbody>
+			</table>
+		</div>
+	</article>
+	    
+	    
+	    <!--添加角色-->
+	    <div id="modal-demo" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        	<div class="modal-dialog">
+        		<div class="modal-content radius">
+        			<div class="modal-header">
+        				<h3 class="modal-title">添加角色</h3>
+        				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+        			</div>
+        			<div class="modal-body">
+        				<div class="Huialert Huialert-success">提示：角色名称,角色权限必填</div>
+        				<form  class="form form-horizontal" id="form-role-add" >
+            				<div class="row cl">
+                    			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+                    			<div class="formControls col-xs-8 col-sm-9">
+                    				<input type="text" class="input-text" value=""  placeholder="请输入角色名称" id="name"  name="role_name">
+                    			</div>
+                    		</div>
+                    		<div class="row cl">
+                    			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色权限：</label>
+                    			<div class="formControls col-xs-8 col-sm-9">
+                                      <div class="check-box">
+                                        <input type="checkbox" id="checkbox-0" name="power" value="0">
+                                        <label for="checkbox-0">查询</label>
+                                      </div>
+                                      <div class="check-box">
+                                        <input type="checkbox" id="checkbox-1" name="power" value="1">
+                                        <label for="checkbox-1">搜索</label>
+                                      </div>
+                                      <div class="check-box">
+                                        <input type="checkbox" id="checkbox-2" name="power" value="2">
+                                        <label for="checkbox-2">添加</label>
+                                      </div>
+                                      <div class="check-box">
+                                        <input type="checkbox" id="checkbox-3" name="power" value="3">
+                                        <label for="checkbox-3">修改</label>
+                                      </div>
+                                      <div class="check-box">
+                                        <input type="checkbox" id="checkbox-4" name="power" value="4">
+                                        <label for="checkbox-4">删除</label>
+                                      </div>
+                                      <div class="check-box" style="color:red;">
+                                        <input type="checkbox" id="checkbox-disabled" disabled>
+                                        <label for="checkbox-disabled">清空</label>
+                                      </div>
+                                </div>
+                            </div>
+                        </form>
+        			</div>
+        			<div class="modal-footer">
+        				<button class="btn btn-primary"  id="submitRoleForm">添加</button>
+        				<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+	    
+	    <!--修改角色-->
+	    <div id="modal-edit" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        	<div class="modal-dialog">
+        		<div class="modal-content radius">
+        			<div class="modal-header">
+        				<h3 class="modal-title">编辑角色</h3>
+        				<a class="close" data-dismiss="modal" aria-hidden="true" href="javascript:void();">×</a>
+        			</div>
+        			<div class="modal-body">
+        				<div class="Huialert Huialert-success">提示：角色名称,角色权限必填</div>
+        				<form  class="form form-horizontal" id="form-role-edit" >
+            				<div class="row cl">
+                    			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色名称：</label>
+                    			<div class="formControls col-xs-8 col-sm-9">
+                    				<input type="text" class="input-text" value=""  placeholder="请输入角色名称" id="name_edit"  name="name_edit">
+                    			</div>
+                    		</div>
+                    		<div class="row cl">
+                    			<label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>角色权限：</label>
+                    			<div class="formControls col-xs-8 col-sm-9">
+                                      <div class="check-box">
+                                        <input type="checkbox" id="checkbox-edit-0" name="power" value="0">
+                                        <label for="checkbox-edit-0">查询</label>
+                                      </div>
+                                      <div class="check-box">
+                                        <input type="checkbox" id="checkbox-edit-1" name="power" value="1">
+                                        <label for="checkbox-edit-1">搜索</label>
+                                      </div>
+                                      <div class="check-box">
+                                        <input type="checkbox" id="checkbox-edit-2" name="power" value="2">
+                                        <label for="checkbox-edit-2">添加</label>
+                                      </div>
+                                      <div class="check-box">
+                                        <input type="checkbox" id="checkbox-edit-3" name="power" value="3">
+                                        <label for="checkbox-edit-3">修改</label>
+                                      </div>
+                                      <div class="check-box">
+                                        <input type="checkbox" id="checkbox-edit-4" name="power" value="4">
+                                        <label for="checkbox-edit-4">删除</label>
+                                      </div>
+                                      <div class="check-box" style="color:red;">
+                                        <input type="checkbox" disabled id="checkbox-edit-5" name="power" value="5"> 
+                                        <label for="checkbox-edit-5">清空</label>
+                                      </div>
+                                </div>
+                            </div>
+                        </form>
+        			</div>
+        			<div class="modal-footer">
+        				<button class="btn btn-primary"  id="submitRoleEditForm">编辑</button>
+        				<button class="btn" data-dismiss="modal" aria-hidden="true">取消</button>
+        			</div>
+        		</div>
+        	</div>
+        </div>
+</div>
+
+    <!--无权查看显示-->
+	<div class="nopower" style="display:{$isPower?'none':''}">
+	    <img  src="__PUBLIC__/img/noPower.jpg" alt="" />
+	</div>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+$(function(){
+    
+	$('.table-sort').dataTable({
+    	"aaSorting": [[ 1, "asc" ]],//默认第几个排序
+    	"bStateSave": true,//状态保存
+    	"aoColumnDefs": [
+    	  //{"bVisible": false, "aTargets": [ 3 ]} //控制列的隐藏显示
+    	  {"orderable":false,"aTargets":[0,2,3,4]}// 制定列不参与排序
+    	]
+	});
+	$('.table-sort tbody').on( 'click', 'tr', function () {
+		if ( $(this).hasClass('selected') ) {
+			$(this).removeClass('selected');
+		}
+		else {
+			$('tr.selected').removeClass('selected');
+			$(this).addClass('selected');
+		}
+	});
+	
+	
+    // 修改角色权限--获取角色信息
+    $(document).on('click touchend','#editRole',function(){
+        let rid = $(this).attr('uniqueId');
+        // 有待改善
+        for(let i=0;i<=5;i++){
+            $('#checkbox-edit-'+i).prop('checked',false)
+        }
+        $.ajax({
+           url:url.getRoleOne,
+           type:'post',
+           data:{rid},
+           dataType:'json',
+           success:res=>{
+            //   console.log(res)
+               if(res.status == 1){
+                   $("#modal-edit").modal("show")
+                   $('#submitRoleEditForm').attr('uniqueId',rid)
+                   $('#name_edit').val(res.data.role_name)
+                   
+                   let power = res.data.power
+                   power = power.split(',')
+                //   console.log(power)
+                   power.forEach((item,index)=>{
+                        $('#checkbox-edit-'+item).prop('checked',true)
+                   })
+                   
+               }else{
+                   layer_noChange(res.info)
+               }
+           }
+        });
+    })
+    
+    // 修改角色权限 -- 提交编辑信息
+    $('#submitRoleEditForm').on('click touchend',function(){
+        let role_name = $("#name_edit").val().trim();
+        let rid = $(this).attr('uniqueId')
+        let power = []
+        $.each($('#form-role-edit input:checkbox:checked'),function(){
+            power.push($(this).val())
+        })
+        
+        if(role_name.length == 0){
+            layer_shake('角色名称不能为空！')
+            return false
+        }
+        if(power.length == 0){
+            layer_shake('至少选择1-2个权限！')
+            return false
+        }
+        power = power.join(',')
+         
+        $.ajax({
+            url:url.editRole,
+            type:'post',
+            data:{
+                rid,role_name,power
+            },
+            dataType:'json',
+            success:res=>{
+                console.log(res)
+                if(res.status == 1){
+                    layer_success(res.info)
+                    setTimeout(function() {location.reload()}, 800);
+                }else{
+                    layer_noChange(res.info)
+                }
+            }
+        });
+    })
+    
+    // 添加角色--显示表单
+    $(document).on('click touchend','#addRole',function(){
+        $("#modal-demo").modal("show")
+    })
+    
+    // 添加角色--提交表单
+    $(document).on('click touchend','#submitRoleForm',function(){
+        let role_name = $("#name").val().trim();
+        
+        let power = []
+        $.each($('#form-role-add input:checkbox:checked'),function(){
+            power.push($(this).val())
+        })
+        
+        if(role_name.length == 0){
+            layer_shake('角色名称不能为空！')
+            return false
+        }
+        if(power.length == 0){
+            layer_shake('至少选择1-2个权限！')
+            return false
+        }
+        power = power.join(',')
+        
+        $.ajax({
+            url:url.addRole,
+            type:'post',
+            data:{
+                role_name,power
+            },
+            dataType:'json',
+            success:res=>{
+                console.log(res)
+                if(res.status == 1){
+                    layer_success(res.info)
+                    setTimeout(function() {location.reload()}, 800);
+                }else{
+                    layer_noChange(res.info)
+                }
+            }
+        });
+    })
+    
+    // 删除角色
+    $(document).on('click touchend','#deleteRole',function(){
+       let rid = $(this).attr('uniqueId');
+    //   console.log(id);
+        layer.confirm('确认要删除吗？',function(index){
+            $.ajax({
+               url:url.deleteRole,
+               type:'post',
+               data:{rid},
+               dataType:'json',
+               success:res=>{
+                   console.log(res)
+                   if(res.status == 1){
+                       layer_success(res.info)
+                       setTimeout(()=>{location.reload()},800)
+                   }else{
+                       layer_noChange(res.info)
+                   }
+               }
+            });
+        });
+        
+    })
+    
+    // 搜索角色
+    // $(document).on('click touchend','.searchRole',function(){
+        
+    // })
+    
+});
+		
+</script>
+{/block}

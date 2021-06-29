@@ -1,0 +1,84 @@
+{extend name="public/default" /}
+
+{block name="title"}
+<title>选课系统-管理员</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .title{
+        text-align: center;
+        color: {$config_color}; 
+        font-size: 25px;
+        font-weight: 600;
+    }
+    .dowebok{
+        text-align: center;
+        margin: 120px auto;
+    }
+    .flipTimer .digit > div.digit-top, .flipTimer .digit > div.shadow-top {
+        background-color: {$config_color};
+        border-bottom: 1px solid {$config_color};
+    }
+    .flipTimer .digit > div.digit-bottom, .flipTimer .digit > div.shadow-bottom {
+          background-color: {$config_color};
+    }
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">系统管理</span>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">系统设置</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a></nav>
+	<div class="Hui-article" style="display:{$isPower?'':'none'}">
+	<article class="cl pd-20 manage hui-bounceinB">
+	    <div class="Huialert Huialert-success" style="text-align: center;margin: 20px auto;line-height: 30px;"><i class="Hui-iconfont" >&#xe6a6;</i>可根据当前登录者的ip地址去开发异地登录的情况</div>
+        <!---->
+        <h4 id="">当前系统背景：<span>{$config_color}</span></h4>
+        <h4 id="">当前登录ip：<span>{$ip}</span></h4>
+        <h4 id="">当前地址：<span class="address"></span></h4>
+    </article>
+</div>
+
+<!--无权查看显示-->
+	<div class="nopower" style="display:{$isPower?'none':''}">
+	    <img  src="__PUBLIC__/img/noPower.jpg" alt="" />
+	</div>
+</section>
+{/block}
+
+{block name="script"}
+<script type="text/javascript">
+
+$(function(){
+    
+    // 获取实际地理位置
+	$.ajax({
+            url:'https://v2.alapi.cn/api/ip',
+            type:'post',
+            headers: {
+                token: "0BFBXjyFJR1LP15L"
+            },
+            dataType:'json',
+            success:res=>{
+                console.log(res)
+                if(res.code == 200){
+                    $('.address').text(res.data.pos)
+                    // layer_success(res.info)
+                    // setTimeout(function() {location.reload()}, 800);
+                }else{
+                    layer_shake(res.info)
+                }
+            }
+        });
+});
+		
+</script>
+{/block}

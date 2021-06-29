@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>选课系统--登录</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	{load href="__PUBLIC__/plugins/bootstrap/css/bootstrap.min.css"/}
+	{load href="__PUBLIC__/css/normalize.css"/}
+	{load href="__PUBLIC__/plugins/font-awesome-4.7.0/css/font-awesome.min.css" /}
+	{load href="__PUBLIC__/css/animate.min.css" /}
+	
+	{load href="__PUBLIC__/plugins/loadingAnimate/mop-lqs.css" /}
+	
+	<!-- 粒子特效 -->
+    <!-- {load href="__PUBLIC__/plugins/lizi/lizi.css"} -->
+   
+    <style>
+
+        *{
+            margin: 0;
+            padding: 0;
+            /*cursor:url('__PUBLIC__/img/pointer2.ico'),auto;*/
+        }
+        body{
+            height:100%;
+            width: 100%;
+			/* background: radial-gradient( at center, #28c7ba, #1a867d); */
+			/*background-color: {$config_color};*/
+			/*background:url('__PUBLIC__/img/loginbg.png') no-repeat;*/
+        }
+        .loginbg{
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .loginbg img{
+            width: 100%;
+            height: 100%;
+        }
+		#particles-js {
+		    background-size: cover;
+		    background-position: 50% 50%;
+		    background-repeat: no-repeat;
+		    width: 100%;
+		    height: 100%;
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		}
+		ul{
+			list-style: none;
+		}
+		.centerdiv{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+        .loginDiv{
+            width: 500px;
+            border: 1px solid rgb(210,210,210);
+            background:#fff;
+            box-shadow: 0 0 100px rgba(0,0,0,.45);
+            border-radius: 5px;
+        }
+		.header{
+			width: 100%;
+			height: 60px;
+			position: absolute;
+			top:0;
+			left:0;
+			/* background-color: {$config_color}; */
+			background-color: rgba(173, 173, 173, 0.5);
+			box-shadow: 0 0 8px rgba(0,0,0,0.25);
+			display: flex;
+			z-index: 999;
+		}
+		.header .title{
+			flex: 1;
+			color: #FFF;
+			font-size: 22px;
+			line-height: 60px;
+			font-weight: 900;
+			padding-left: 120px;
+		}
+		.header .config{
+			flex: 1;
+			text-align: right;
+			line-height: 60px;
+			padding-right: 120px;
+			color: #FFF;
+		}
+		.header .config ul li{
+			float: right;
+			width: 85px;
+			text-align: center;
+			cursor: pointer;
+		}
+		.config .set,.config .skin{
+			display: inline-block;
+			width: 15px;
+			height: 15px;
+			line-height: 15px;
+			vertical-align: text-top;
+			margin: 0 3px;
+		}
+		.config .set img,.config .skin img{
+			width: 100%;
+			height: 100%;
+		}
+		.colors,.lizi{
+			display: flex;
+			flex-wrap: wrap;
+			background-color: #fff;
+			color: #000000;
+			display: none;
+		}
+		.colors li,.lizi li{
+			width: 100%;
+			height: 33px;
+			line-height: 33px;
+		}
+		.colors li>span,.lizi li>span{
+			display: inline-block;
+			width: 10px;
+			height: 10px;
+			border-radius: 5px;
+			margin: 0 7px;
+			margin-left: -3px;
+		}
+		/* .header .config ul .second:hover .colors{
+			display: flex;
+		} */
+		
+        .contentDiv{
+            width: 70%;
+            margin: 0 auto;
+            margin-top: 50px;
+        }
+        .logMethod{
+            color: rgb(210,210,210);
+            text-align: center;
+            height: 35px;
+            font-size: 18px;
+            line-height: 35px;
+            cursor: pointer;
+        }
+        .active{
+            border-bottom: 2px solid {$config_color};
+            color: {$config_color};
+        }
+        .inp{
+            font-size: 20px;
+            text-indent:1em;
+            width: 100%;
+            height: 35px;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid rgb(210,210,210);
+        }
+        .checkCode{
+            font-size: 20px;
+            text-indent:1em;
+            width: 65%;
+            height: 35px;
+            border: none;
+            outline: none;
+            border-bottom: 1px solid rgb(210,210,210);
+            display: inline-block;
+        }
+        .mtb15{
+            margin: 15px;
+        }
+        .w{
+            margin-top: 30px;
+            margin-bottom: 0;
+        }
+        .f{
+            margin-top: -10px;
+            margin-bottom: 40px;
+            width: 313px;
+        }
+        .logBtn{
+            height: 38px;
+            line-height: 37px;
+            border: 1px solid {$config_color};
+            border-radius: 20px;
+            background: {$config_color};
+            color: white;
+            text-align: center;
+            font-size: 20px;
+        }
+        .logIcon{
+            color: rgb(210,210,210);
+            font-size: 20px;
+            height: 35px;
+            line-height: 35px;
+        }
+        .logIcon i{
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+        .iconText{
+            color: rgb(210,210,210);
+            font-size: 15px;
+        }
+        .righticon{
+            width: 25px;
+            height: 25px;
+            text-align: center;
+            font-size: 20px;
+            line-height: 25px;
+            color: white;
+            border-radius: 50%;
+            border: 1px solid {$config_color};
+            background: {$config_color};
+        }
+        .regText{
+            color: {$config_color};
+            font-size: 18px;
+            height: 35px;
+            line-height: 35px;
+            cursor: pointer;
+        }
+        .forget{
+            /*color: rgb(210,210,210);*/
+            color: #a1bfd3;
+            font-size: 14px;
+            display: inline-block;
+        }
+        .forget:hover{
+            text-decoration: underline;
+            color: #2d64b3;
+        }
+        .register{
+            display: inline-block;
+            float: right;
+        }
+        .code{
+            width: 108px;
+            height: 100%;
+            display: inline-block;
+            position: absolute;
+            top: 0;
+            right: 40px;
+            z-index: 99;
+			cursor: pointer;
+        }
+		.code img{
+			width: 100%;
+			height: 100%;
+		}
+        .openPW,.closePW{
+            position: absolute;
+            top: 12px;
+            right: 50px;
+            z-index: 9;
+            opacity: .5;
+            cursor: pointer;
+        }
+        .closePW{
+            display: none;
+        }
+		 /*单选按钮样式*/
+		.RadioStyle input {
+			display: none
+		}
+		.RadioStyle label {
+			border: 1px solid #CCC;
+			color: #666;
+			padding: 2px 10px 2px 5px;
+			line-height: 28px;
+			min-width: 80px;
+			text-align: center;
+			float: left;
+			margin: 2px;
+			/* border-radius: 4px; */
+		}
+		.RadioStyle input:checked + label {
+			/* background: url(__PUBLIC__/img/ico_checkon.svg) no-repeat right bottom; */
+			border: 1px solid {$config_color};
+			background-size: 21px 21px;
+			color: {$config_color}
+		}
+		.RadioStyle input:disabled + label {
+			opacity: 0.7;
+		}
+        
+		/* 去除密码 安全键盘图标 */
+         input::-webkit-input-safebox-button{
+             display: none;
+         } 
+		 /* 去除密码框小眼睛样式 */
+		 input[type="password"]::-ms-reveal{
+		  display:none
+		 }
+		 
+		 /*去除浏览器滚动条默认样式*/
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            color: transparent;
+         }
+         
+         
+         /*加载样式*/
+        .wave {
+            min-width: 60px;
+            min-height: 60px;
+            width: 60px;
+            height: 60px;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+        }
+        .wave > div {
+            background-color: #fff;
+        }
+        .mop-load-text {
+           display: none;
+        }
+
+    </style>
+</head>
+<body>
+	<!--粒子特效背景--> 
+	<!--<div id="particles-js" style="background:{$config_color} !important; display: {if condition="$config_lizi eq 1"} none {else /} '' {/if};">-->
+	<!--	<canvas class="particles-js-canvas-el" ></canvas>-->
+	<!--</div>-->
+	
+	<!--背景图-->
+	<div class="loginbg">
+	    <img src="__PUBLIC__/img/loginbg.png" alt="" />
+	</div>
+	
+	<!--头部导航条-->
+	<div class="header animate__animated animate__fadeInDown">
+		<div class="title animate__animated animate__fadeInDown">智慧校园选课系统</div>
+		<div class="config">
+			<ul>
+				<!--<li class="first"><span class="set"><img src="__PUBLIC__/img/set.png" ></span><span>设置</span>-->
+				<!--	<ul class="lizi">-->
+				<!--		<li style="color: {$config_color};" type="{$config_lizi}">-->
+				<!--		{if condition="$config_lizi eq 1 "}开启粒子-->
+				<!--		{else/} 关闭粒子-->
+				<!--		{/if}-->
+				<!--		</li>-->
+				<!--	</ul>-->
+				<!--</li>-->
+				<li class="second animate__animated animate__headShake animate__infinite animate__delay-3s"><span class="skin"><img src="__PUBLIC__/img/skin.png" ></span><span>主题</span>
+					<ul class="colors animate__animated animate__pulse">
+						<li style="color: #009688;"><span style="background-color:  #009688"></span>默认</li>
+						<li style="color: #001C26;"><span style="background-color: #001C26"></span>暗色</li>
+						<li style="color: #8552a1;"><span style="background-color: #8552a1"></span>紫色</li>
+						<li style="color: #0E4EA8;"><span style="background-color: #0E4EA8"></span>蓝色</li>
+						<li style="color: green;"><span style="background-color: green"></span>绿色</li>
+						<li style="color: #009ad6;"><span style="background-color: #009ad6"></span>青色</li>
+						<li style="color: red;"><span style="background-color: red"></span>红色</li>
+						<li style="color: #303643;"><span style="background-color: #303643"></span>黑色</li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+	</div>
+    
+    <!--登录框-->
+    <div class="centerdiv">
+         
+    
+    <div id="loginDiv" class="loginDiv animate__animated animate__fadeInLeft" >
+        <div class="contentDiv row ">
+            <div class="col-sm-12">
+                <div class="col-sm-12 logMethod active" >
+                    用户登录
+                </div>
+            </div>
+            <div class=" col-sm-12 mtb15 w">
+                <div class="input-group" >
+                  <div class="input-group-addon" style="color:#FFF;background:#9C9FA4;" id="account-icon"><span  class="glyphicon glyphicon-user"></span></div>
+                  <input type="text" class="form-control" spellcheck="false" id="account" placeholder="请输入帐号" style="width:240px;height:38px;border-radius: 0;">
+                </div>
+            </div>
+            <div class=" col-sm-12 mtb15" id="pwdDiv">
+                <div class="input-group" style="poosition:relative;">
+                  <div class="input-group-addon" style="color:#FFF;background:#9C9FA4;" id="pw-icon">
+                    <svg t="1616040235202" class="icon"  viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1154" width="15" height="15"><path d="M204.8 316.104348V311.652174a307.2 307.2 0 1 1 614.4 0v4.452174H868.173913c46.747826 0 84.591304 37.843478 84.591304 84.591304v534.26087a84.591304 84.591304 0 0 1-84.591304 84.591304H155.826087A84.591304 84.591304 0 0 1 71.234783 934.956522V400.695652C71.234783 353.947826 109.078261 316.104348 155.826087 316.104348h48.973913z m80.13913 0h454.12174V311.652174A227.06087 227.06087 0 0 0 284.93913 311.652174v4.452174zM155.826087 396.243478a4.452174 4.452174 0 0 0-4.452174 4.452174v534.26087a4.452174 4.452174 0 0 0 4.452174 4.452174h712.347826a4.452174 4.452174 0 0 0 4.452174-4.452174V400.695652a4.452174 4.452174 0 0 0-4.452174-4.452174H155.826087z m356.173913 138.017392a44.521739 44.521739 0 0 1 44.521739 44.521739v178.086956a44.521739 44.521739 0 0 1-89.043478 0v-178.086956a44.521739 44.521739 0 0 1 44.521739-44.521739z" fill="#fff" p-id="1155"></path></svg>
+                </div>
+                  <input type="password" class="form-control" spellcheck="false" id="password" placeholder="请输入密码" style="width:240px;height:38px;">
+                  
+                      <!--隐藏 查看-->
+                      <span class="glyphicon glyphicon-eye-open openPW"></span>
+                      <span class="glyphicon glyphicon-eye-close closePW"></span>
+                </div>
+            </div>
+			
+			<div class="input-group" style="position: relative;margin-left: 30px;">
+			  <div class="input-group-addon" style="color:#FFF;background:#9C9FA4;" id="code-icon">
+			      <svg t="1616043903558" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2205" width="16" height="16"><path d="M508.062 68c143.317 67.291 258.119 104.66 344.405 112.11C870.305 181.648 884 196.577 884 214.48v333.564C853.667 748.94 728 886.258 507 960c-223.854-74.019-349.521-211.337-377-411.955V215.16c0-18.16 14.077-33.21 32.195-34.423 89.313-5.98 204.602-43.558 345.867-112.736z m-0.166 69.589c-132.617 65.006-238.082 96.951-316.394 95.834l-2.365-0.044v309.354C212.306 712.05 318.26 827.942 507 890.411c184.47-61.614 290.161-175.816 317.071-342.607l0.792-5.07V233.378c-75.11 0.153-180.766-31.777-316.967-95.79zM708.97 358.073c12.69 12.766 12.69 33.448 0 46.214l-227.762 228.89a32.468 32.468 0 0 1-23.007 9.565c-8.34 0-16.646-3.2-23.007-9.566L305.03 502.386c-12.69-12.765-12.69-33.48 0-46.245 12.723-12.766 33.324-12.766 46.014 0L458.2 563.807l204.755-205.734c12.69-12.798 33.291-12.798 46.014 0z" fill="#ffffff" p-id="2206"></path></svg>
+			    </div>
+			  <input type="text" class="form-control" spellcheck="false" id="code" placeholder="请输入验证码" style="width:125px;height:38px;">
+			 <div class="code"><img id="verify_img" src="{:captcha_src()}" alt="captcha" onclick="this.src='/captcha'" /></div>
+			</div>
+			
+			<div class=" col-sm-12 mtb15">
+				<div class="RadioStyle">
+					<div class="Block PaddingL">
+						<input type="radio" name="type" id="model1" value="0" />
+						<label for="model1" style="margin:auto 8px;margin-left: 6px;">管理员</label>
+						<input type="radio" name="type" id="model2" value="1" />
+						<label for="model2" style="margin:auto 8px;">学生</label>
+						<input type="radio" name="type" id="model3" value="2" />
+						<label for="model3" style="margin:auto 8px;">教师</label>
+					</div>
+				</div>
+			</div>
+			
+            <div class="col-sm-12  mtb15" id="logBtnDiv" style="cursor: pointer;width: 312px;margin-top: 15px;">
+                <div class="logBtn">
+                    登&nbsp;&nbsp;录
+                </div>
+            </div>
+            <div class="col-sm-12  mtb15 f" >
+                <div class="regText forget" id="goToForget">
+                    忘记密码?
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    
+    <!--load加载-->
+    <div class="mop-load-2" style="display:none;" id="loading"></div>
+        
+    <!--<footer style="position:fixed;bottom:10px;left:45%;text-align:center;color:#FFF;">-->
+    <!--	<div class="container-fluid" >-->
+    		<!--<nav> <a href="javascript:;" >关于我们</a> <span class="pipe">|</span> <a href="javascript:;">联系我们</a> <span class="pipe">|</span> <a href="javascript:;" >法律声明</a> </nav>-->
+    <!--		<p>备案号 <br>-->
+    <!--			<a style="color:#FFF;" href="http://beian.miit.gov.cn/" target="_blank" rel="nofollow">渝ICP备2020013404号-1</a><br>-->
+    <!--		</p>-->
+    <!--	</div>-->
+    <!--</footer> -->
+    
+</body>
+
+	{load href="__PUBLIC__/js/jquery-3.0.0.min.js"}
+	{load href="__PUBLIC__/plugins/bootstrap/js/bootstrap.min.js"}
+	<!--{load href="__PUBLIC__/plugins/lizi/lizi.js" }-->
+	{load href="__PUBLIC__/plugins/layui-v2.5.7/layui.js" }
+	{load href="__PUBLIC__/common/js/common.js"}
+	
+	{load href="__PUBLIC__/plugins/loadingAnimate/mop-lqs.js" /}
+
+<script type="text/javascript">
+	// 输入框有内容变色
+	function addBGC(el,icon){
+		if($(el).val().trim().length>0){
+		  $(icon).css({
+			'background-color':'{$config_color}'
+		  })
+		 }else{
+			$(icon).css({
+				'background-color':'#9C9FA4'
+			})
+		}
+	}
+	addBGC('#account','#account-icon')
+	addBGC('#password','#pw-icon')
+	addBGC('#code','#code-icon')
+	function changeBGC(el,icon){
+		$(el).on('input',function(){
+			addBGC(el,icon)
+		})
+	}
+	
+	// 表单验证
+	// function checkForm(el,msg){
+	// 	if($(el).val().trim().length==0){
+	// 	    layer_danger(msg);
+	// 	    return false;
+	// 	}else{
+	// 		return true
+	// 	}
+	// }
+	
+	// 刷新验证码
+	function refreshVerify() {
+		var ts = Date.parse(new Date())/1000;
+		$('#verify_img').attr("src", "/captcha?id="+ts);
+	}
+</script>
+
+
+<script>
+	
+    $(function(){
+        
+		changeBGC('#account','#account-icon')
+		changeBGC('#password','#pw-icon')
+		changeBGC('#code','#code-icon')
+		
+        // 查看密码
+        $('.openPW').click(function(){
+            $(this).hide()
+            $('.closePW').show()
+            $('#password').attr('type','text')
+        })
+        // 隐藏密码
+        $('.closePW').click(function(){
+            $(this).hide()
+            $('.openPW').show()
+            $('#password').attr('type','password')
+        })
+        
+        
+        $(document).on('click','#goToForget',function(){
+            $('.loginDiv').css({
+                transform:'translate(0%,0%)'
+            })
+            $('.header').removeClass('animate__animated animate__fadeInDown')
+			$('.header').addClass('animate__animated animate__fadeOutUp')
+            $('.loginDiv').addClass('animate__animated animate__fadeOutLeft')
+		    setTimeout(function(){
+		        location.href = "{:url('Login/forget')}"
+		    },1000)
+        });
+        
+        
+        $('#logBtnDiv').hover(function(){
+            $(this).addClass('animate__animated animate__pulse animate__infinite')
+        },function(){
+            $(this).removeClass('animate__animated animate__pulse')
+        })
+        // 登录
+        $(document).on('click','#logBtnDiv',function(){
+            let account = $('#account').val().trim();
+            let password = $('#password').val().trim();
+            let code = $('#code').val().trim();
+            let type = $('input[name="type"]:checked').val();
+			if(account.length == 0){
+				layer_danger('不要忘记输入帐号哟')
+				return false
+			}
+			if(password.length == 0){
+				layer_danger('不要忘记输入密码哟')
+				return false
+			}
+			if(code.length == 0){
+				layer_danger('不要忘记输入验证码哟')
+				return false
+			}
+			if(type==null){
+				layer_danger('不要忘记选择你的身份哟');
+				return false;
+			}
+
+			$.ajax({
+				url:"{:url('Login/checkLogin')}",
+				data:{
+					account,password,type,code
+				},
+				type:"post",
+				dataType:"json",
+				success:res=>{
+					console.log(res)
+					if(res.status==1){
+					    $('.loginDiv').css({
+                            transform:'translate(0%,0%)'
+                        })
+					    $('#loginDiv').addClass('animate__animated animate__fadeOutRight')
+					    $('.header').removeClass('animate__animated animate__fadeInDown')
+					    $('.header').addClass('animate__animated animate__fadeOutUp')
+					    $('#loading').show()
+					    setTimeout(function(){
+					      if(type==0){
+    							location.href="{:url('Index/index')}";
+    						}else if(type == 1){
+    							location.href="{:url('Student/index')}";
+    						}else{
+    							location.href="{:url('Teacher/index')}";
+    						}  
+					    },2500)
+						layer_success(res.info)
+						
+					}else{
+						// 刷新验证码
+						refreshVerify()
+						$('#code').val('')
+						addBGC('#account','#account-icon')
+						addBGC('#password','#pw-icon')
+						addBGC('#code','#code-icon')
+						layer_danger(res.info);
+					}
+				}
+			});
+            
+        });
+		
+		
+		$('.first').hover(function(){
+			flag = false
+			$('.lizi').stop().slideDown()
+			$('.lizi').css({
+				'display':'flex'
+			})
+		},function(){
+			$('.lizi').stop().slideUp()
+			flag = true
+		})
+		$('.second').hover(function(){
+		    $(this).removeClass('animate__animated animate__pulse animate__infinite animate__delay-2s')
+			flag = false
+			$('.colors').stop().slideDown()
+			$('.colors').css({
+				'display':'flex'
+			})
+		},function(){
+		    $(this).addClass('animate__animated animate__pulse animate__infinite animate__delay-2s')
+			$('.colors').stop().slideUp()
+			flag = true
+		})
+		
+		
+		// 改变皮肤
+		$('.colors').on('click','li',function(){
+			// console.log($(this).index())
+			let index = $(this).index()
+			$.ajax({
+				url:"{:url('Login/changeSkin')}",
+				data:{
+					index
+				},
+				type:"post",
+				dataType:"json",
+				success:res=>{
+					if(res.status == 1){
+						location.reload()
+						layer_success('换肤成功')
+					}else{
+						layer_success('换肤失败')
+					}
+				}
+			});
+		})
+		
+		// 是否开启粒子特效
+		$('.lizi').on('click','li',function(){
+			let type = $(this).attr('type') == 0? 1: 0
+			$.ajax({
+				url:"{:url('Login/setLizi')}",
+				data:{
+					type
+				},
+				type:"post",
+				dataType:"json",
+				success:res=>
+				{
+					if(res.status == 1){
+						location.reload()
+						// layer_success('粒子特效设置成功')
+					}else{
+						layer_success('粒子特效设置失败')
+					}
+				}
+			});
+		})
+
+    });
+    
+    
+</script>
+</html>

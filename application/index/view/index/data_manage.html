@@ -1,0 +1,110 @@
+{extend name="public/default" /}
+
+{block name="title"}
+<title>选课系统-管理员</title>
+</head>
+<body>
+    
+    
+<style type="text/css" media="all">
+    .title{
+        text-align: center;
+        color: {$config_color}; 
+        font-size: 25px;
+        font-weight: 600;
+    }
+    .dowebok{
+        text-align: center;
+        margin: 120px auto;
+    }
+    .flipTimer .digit > div.digit-top, .flipTimer .digit > div.shadow-top {
+        background-color: {$config_color};
+        border-bottom: 1px solid {$config_color};
+    }
+    .flipTimer .digit > div.digit-bottom, .flipTimer .digit > div.shadow-bottom {
+          background-color: {$config_color};
+    }
+    .data{
+        display: flex;
+    }
+</style>
+{/block}
+
+{block name="content"}
+<section class="Hui-article-box">
+	<nav class="breadcrumb">
+	    <i class="Hui-iconfont switch-icon">&#xe70f;</i> 
+	    <i class="Hui-iconfont"></i> <a href="{:url('index/index/index')}" class="maincolor">首页</a> 
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">数据统计</span>
+		<span class="c-999 en">&gt;</span>
+		<span class="c-666">数据统计</span>  
+		<a class="btn btn-success radius r" style="line-height:1.6em;margin-top:3px;background-color: {$config_color};" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont" >&#xe68f;</i></a></nav>
+	<div class="Hui-article" style="display:{$isPower?'':'none'}">
+	<article class="cl pd-20 data">
+	    <!--用户管理-->
+        <div id="user" style="width: 600px;height:400px;margin:15px auto;"></div>
+        
+        <!--课程管理-->
+        <div id="course" style="width: 600px;height:400px;margin:15px auto;"></div>
+    </article>
+</div>
+
+    <!--无权查看显示-->
+	<div class="nopower" style="display:{$isPower?'none':''}">
+	    <img  src="__PUBLIC__/img/noPower.jpg" alt="" />
+	</div>
+</section>
+{/block}
+
+{block name="script"}
+
+{load href="__PUBLIC__/js/echarts.min.js"/}
+
+<script type="text/javascript">
+
+// 基于准备好的dom，初始化echarts实例
+        var userCharts = echarts.init(document.getElementById('user'));
+        var courseCharts = echarts.init(document.getElementById('course'));
+        // 指定图表的配置项和数据
+       userCharts.setOption({
+             title: {
+                text: '用户管理人数统计'
+            },
+            series : [
+                {
+                    name: '访问来源',
+                    type: 'pie',
+                    radius: '50%',
+                    data:[
+                        {value:{$managerCount}, name:'管理员-{$managerCount}人'},
+                        {value:{$studentCount}, name:'学生-{$studentCount}人'},
+                        {value:{$teacherCount}, name:'教师-{$teacherCount}人'},
+                    ]
+                }
+            ]
+        })
+        
+        
+        courseCharts.setOption({
+            title: {
+                text: '当前系统管理模块数据条数'
+            },
+            tooltip: {},
+            legend: {
+                data:['数据']
+            },
+            xAxis: {
+                data: ['用户','课程','学院','专业','权限','角色']
+            },
+            yAxis: {},
+            series: [{
+                name: '数据',
+                type: 'bar',
+                data: [{$userCount},{$courseCount},{$collegeCount},{$majorCount},{$powerCount},{$roleCount}]
+            }]
+        });
+
+		
+</script>
+{/block}
