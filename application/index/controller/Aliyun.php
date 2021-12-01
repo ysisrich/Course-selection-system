@@ -9,14 +9,13 @@ namespace app\index\controller;
 class Aliyun {
 
     // Access Key ID
-    private $accessKeyId = 'LTAI4FzueDz3CwpXN3BomFhm';
+    private $accessKeyId = '';
     // Access Access Key Secret
-    private $accessKeySecret = 'eB3ZkJGcssskiuQDIxb2xCO62Z8NkU';
+    private $accessKeySecret = '';
     // 签名
-    private $signName = '森邻里';
-    // private $signName = '森邻里1';
+    private $signName = '';
     // 模版ID
-    private $templateCode = 'SMS_174991174';
+    private $templateCode = '';
 
     private function percentEncode($string) {
         $string = urlencode ( $string );
